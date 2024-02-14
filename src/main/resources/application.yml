@@ -1,0 +1,15 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: SABSPLExamPortal
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:3306/sabsplexamportal
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect: org.hibernate.dialect.MySQLDialect
+      format-sql: true
+      ddl-auto: update
