@@ -1,10 +1,7 @@
-package com.SABSPL.SABSPLExamPortal.entities;
+package com.SABSPL.SABSPLExamPortal.model;
 
 import com.SABSPL.SABSPLExamPortal.enums.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,12 +13,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@MappedSuperclass
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends BaseEntity implements UserDetails {
+@Entity
+@Table(name = "user", schema = "sabsep")
+public class UserValue extends BaseEntity implements UserDetails {
+    @Id
+    @TableGenerator(
+            name = "SEQ",
+            table = "seq",
+            pkColumnName = "seq_name",
+            valueColumnName = "seq_value",
+            pkColumnValue = "user_pk",
+            allocationSize = 4
+    )
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "SEQ")
+    @Column(name = "id")
+    private Integer userId;
 
     @Column(name = "username")
     private String userName;

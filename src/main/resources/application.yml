@@ -13,3 +13,11 @@ spring:
       dialect: org.hibernate.dialect.MySQLDialect
       format-sql: true
       ddl-auto: update
+  security:
+    filter:
+      order: 10
+
+app:
+  # ,R-!belR=AwTp{a,q5yW#ujpnmw}Vc{~!y~W38UZ8KKt$jwKuo
+  jwt-secret: LFItIWJlbFI9QXdUcHthLHE1eVcjdWpwbm13fVZje34heX5XMzhVWjhLS3QkandLdW8=
+  jwt-expiration-milliseconds: 21600000 # 6 hours

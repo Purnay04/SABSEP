@@ -1,4 +1,4 @@
-package com.SABSPL.SABSPLExamPortal.entities;
+package com.SABSPL.SABSPLExamPortal.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
