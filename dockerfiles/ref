@@ -1,0 +1,5 @@
+https://www.appsdeveloperblog.com/deploying-spring-boot-app-and-mysql-in-docker-containers/
+
+
+
+docker exec -it c34c588058f1  mysql -u user -p

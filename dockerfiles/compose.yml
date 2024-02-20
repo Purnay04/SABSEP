@@ -1,0 +1,38 @@
+version: '1'
+services:
+  db:
+    image: mysql:8.0
+    container_name: sabsep-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sabsepdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - 3306:3306
+    volumes:
+      - ../app-data/mysql:/var/lib/mysql
+
+  backend:
+    image: sabsep-backend-bootstrap:latest
+    container_name: sabsep-service
+    restart: always
+    build:
+      context: ../
+      dockerfile: ./dockerfiles/backend-bootstrap.Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: user
+      DB_PASSWORD: password
+      LOG_LEVEL: INFO
+      LOG_FILE_PATH: /var/sabsep/app.log
+    volumes:
+      - ../app-data:/var/sabsep:rw
+
+volumes:
+  db_data: {}

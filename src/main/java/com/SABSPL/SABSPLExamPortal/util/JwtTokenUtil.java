@@ -33,6 +33,7 @@ public class JwtTokenUtil {
 
         return Jwts.builder()
                 .setSubject(userName)
+                .claim("roles", authentication.getAuthorities())
                 .setIssuedAt(currDate)
                 .setExpiration(expireDate)
                 .signWith(key())

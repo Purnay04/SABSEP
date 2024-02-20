@@ -1,5 +1,6 @@
 package com.SABSPL.SABSPLExamPortal.service;
 
+import com.SABSPL.SABSPLExamPortal.exception.UserAlreadyExistException;
 import com.SABSPL.SABSPLExamPortal.model.UserValue;
 import com.SABSPL.SABSPLExamPortal.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,15 @@ public class UserService implements UserDetailsService {
         return userRepo
                 .findByUserName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not exist with " + username));
+    }
+
+    @Transactional(rollbackFor = UserAlreadyExistException.class)
+    public void addUser(UserValue user) throws UserAlreadyExistException{
+        if(userRepo.findByEmail(user.getEmail()).isPresent())
+            throw new UserAlreadyExistException(user.getEmail());
+        else if (userRepo.findByUserName(user.getUsername()).isPresent()) {
+            throw new UserAlreadyExistException(user.getUsername());
+        }
+        userRepo.save(user);
     }
 }

@@ -17,6 +17,15 @@ spring:
     filter:
       order: 10
 
+logging:
+  level:
+    root: ${LOG_LEVEL}
+  file:
+    name: ${LOG_FILE_PATH}
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){green} %clr([%level]){magenta}  %c{1.} [%t] %m%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%level] %c{1.} [%t] %m%n"
+
 app:
   # ,R-!belR=AwTp{a,q5yW#ujpnmw}Vc{~!y~W38UZ8KKt$jwKuo
   jwt-secret: LFItIWJlbFI9QXdUcHthLHE1eVcjdWpwbm13fVZje34heX5XMzhVWjhLS3QkandLdW8=
