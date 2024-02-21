@@ -1,5 +1,6 @@
-.background{
-    height:100%;
-    background:paleturquoise;
-    width:100%;
+:host {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }

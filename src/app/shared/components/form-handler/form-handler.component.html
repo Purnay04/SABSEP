@@ -1,0 +1,45 @@
+<form [formGroup]="form" class="flex flex-col gap-6">
+    <div *ngFor="let subForm of groupNames" class="flex flex-col gap-2">
+        <ng-container [formGroupName]="subForm" *ngFor="let control of formGroupsInfo[subForm].controls">
+            <ng-container [ngSwitch]="control.fieldType">
+                <div *ngSwitchCase="'textbox'" class="flex flex-col">
+                    <div class="flex justify-between items-center">
+                        <label [for]="control.name" class="text-md font-medium mb-1"
+                            [ngClass]="control.required ? 'requiredField' : ''">
+                            {{control.label}}
+                        </label>
+                        <ng-container *ngIf="customTemplateRef"
+                            [ngTemplateOutlet]="customTemplateRef[control.name]"></ng-container>
+                    </div>
+                    <input clrInput [type]="(control.fieldType == 'textbox') && control.inputType" [name]="control.name" [formControlName]="control.name" class="textfield"
+                        [ngClass]="{'invalid': form.get(subForm)?.get(control.name)!.invalid && (form.get(subForm)?.get(control.name)!.dirty || form.get(subForm)?.get(control.name)!.touched) }" />
+                    <ng-container
+                        *ngIf="form.get(subForm)?.get(control.name)!.invalid &&
+                        (form.get(subForm)?.get(control.name)!.dirty || form.get(subForm)?.get(control.name)!.touched)">
+                        <span *ngIf="form.get(subForm)?.get(control.name)?.errors!['required']"
+                            class="text-red-500 text-base">
+                            {{control.label}} is required.
+                        </span>
+                    </ng-container>
+                </div>
+                <div *ngSwitchCase="'checkbox'" class="flex gap-2">
+                    <input [name]="control.name" type="checkbox" class="checkbox" clrCheckbox
+                        [formControlName]="control.name" />
+                    <label [for]="control.name" class="text-md font-medium pt-[3px]">
+                        {{control.label}}
+                    </label>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+    <ng-container *ngIf="footerActions.type === 'SingleFullWidth'" [ngTemplateOutlet]="SingleFullWidth"></ng-container>
+</form>
+
+
+<ng-template #SingleFullWidth>
+    <button [disabled]="form.invalid" (click)="handleSubmit()">
+        {{footerActions.action.name}}
+    </button>
+</ng-template>
+
+<ng-template #emptyTemplate></ng-template>
