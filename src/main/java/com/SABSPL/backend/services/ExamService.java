@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -44,6 +43,10 @@ public class ExamService {
             ArrayList<String> originalAnswers = optionalQuestion.get().getAnswers();
             float correctAnswersForCurrentQuestion = answers.stream().filter(ele -> originalAnswers.stream().anyMatch(crt->crt.equals(ele))).toArray().length;
             float totalCorrectOptionsForCurrentQuestion = originalAnswers.size();
+
+//            When only 2 multiple options are to be selected but user selects 3 or 4
+            float extraOptionsSelected = Math.max(0,answers.size() - originalAnswers.size());
+            if (extraOptionsSelected>0) correctAnswersForCurrentQuestion-=extraOptionsSelected;
             double currentQuestionScore = correctAnswersForCurrentQuestion / totalCorrectOptionsForCurrentQuestion;
             totalCorrectAnswers+=currentQuestionScore;
         }

@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 @Data
 @Document("attempts")
@@ -15,8 +16,8 @@ public class ExamAttempt {
     @CreatedBy
     private String email;
     @CreatedDate
-    private String attempted_date;
-    private String score;
+    private Date attempted_date;
+    private double score;
     private ArrayList<ExamAttemptAnswer> answers;
 }
 

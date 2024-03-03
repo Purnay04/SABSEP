@@ -24,6 +24,6 @@ public class QuestionsController {
     @PostMapping("/add")
     public ResponseEntity<?> addQuestion(@RequestBody Question question){
         questionsService.saveQuestion(question);
-        return ResponseEntity.ok(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Question Added.");
     }
 }
