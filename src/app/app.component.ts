@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { AuthService } from './services/auth.service';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ export class AppComponent {
   ) { }
 
   ngOnInit() {
+    initFlowbite();
     this.router.events
     .pipe(
       filter((event) => event instanceof NavigationStart && event.url === '/login')
