@@ -23,8 +23,8 @@ public class ExamService {
         examRepository.save(examAttempt);
     }
 
-    public Page<ExamAttempt> getAllBlogs(Optional<Integer> page, Optional<Integer> size,Optional<String> sortBy){
-        return examRepository.findAll(
+    public Page<ExamAttempt> getAllExamAttempts(Optional<Integer> page, Optional<Integer> size,Optional<String> sortBy){
+        return examRepository.findAllByAnswersIsNotNull(
                 PageRequest.of(
                         page.orElse(0),
                         size.orElse(20),
@@ -51,5 +51,21 @@ public class ExamService {
             totalCorrectAnswers+=currentQuestionScore;
         }
         return totalCorrectAnswers/totalQuestions;
+    }
+
+    public ExamAttempt getExamAttemptById(String id){
+        return examRepository.findById(id).orElseThrow();
+    }
+
+    public Optional<ExamAttempt> getExamAttemptByEmail(String email){
+        return examRepository.findByEmail(email);
+    }
+
+    public boolean examAttemptExistsByEmailId(String email){
+        return examRepository.existsByEmail(email);
+    }
+
+    public void removeAttempt(String id){
+        examRepository.deleteById(id);
     }
 }
