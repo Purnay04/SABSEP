@@ -7,25 +7,30 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { LucideAngularModule } from 'lucide-angular';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { RouterModule } from '@angular/router';
+import { AgGridHandlerComponent } from './components/ag-grid-handler/ag-grid-handler.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
   declarations: [
     FormHandlerComponent,
     ContextMenuDirective,
     ClickOutsideDirective,
-    PageHeaderComponent
+    PageHeaderComponent,
+    AgGridHandlerComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     LucideAngularModule,
-    RouterModule
+    RouterModule,
+    AgGridModule
   ],
   exports: [
     FormHandlerComponent,
     ContextMenuDirective,
     ClickOutsideDirective,
-    PageHeaderComponent
+    PageHeaderComponent,
+    AgGridHandlerComponent
   ]
 })
 export class SharedModule { }

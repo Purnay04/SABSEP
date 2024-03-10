@@ -10,7 +10,9 @@ import {
   Layers3,
   Users,
   LayoutDashboard,
-  Menu
+  Menu,
+  Clock9,
+  Edit
 } from 'lucide-angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -26,6 +28,7 @@ import { LucideIcons } from 'lucide-angular/icons/types';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { TestConfigurationComponent } from './components/test-configuration/test-configuration.component';
 import { AppliedUsersComponent } from './components/applied-users/applied-users.component';
+import { NgxApexchartsModule } from 'ngx-apexcharts';
 
 function svgToLucidIconData(svgString: string) {
   const parsed = parseSync(svgString);
@@ -53,7 +56,8 @@ function getLucideIcons(): LucideIcons {
     AdminRoutingModule,
     SharedModule,
     FormsModule,
-    LucideAngularModule.pick({User, Settings, LogOut, Sun, Moon, Layers3, Users, LayoutDashboard, Menu})
+    NgxApexchartsModule,
+    LucideAngularModule.pick({User, Settings, LogOut, Sun, Moon, Layers3, Users, LayoutDashboard, Menu, Clock9, Edit})
   ],
   providers: [
     {

@@ -1,7 +1,8 @@
 <aside clickOutside [ignoreElements]="[toggleButton, closeSideBar]" (clickOutside)="sidebarToggle = false" id="dashboard-sidebar" [ngClass]="sidebarToggle ? 'translate-x-0' : '-translate-x-full'" class="absolute left-0 top-0 z-40 w-72 h-screen duration-300 ease-linear transition-transform sm:static sm:translate-x-0 -translate-x-full">
   <div class="h-full flex flex-col px-3 py-4 overflow-y-auto bg-slate-950">
     <div class="flex justify-between">
-      <span class="text-xl text-txtColor">LOGO WITH NAME</span>
+      <!-- <span class="text-xl text-txtColor">LOGO WITH NAME</span> -->
+      <img class="w-[240px] h-[80px] object-cover" src="/assets/logo.png" alt="logo">
       <button #closeSideBar name="closeSideBar" (click)="sidebarToggle = false" type="button" class="inline-flex items-center text-sm text-[--anchor-link-color] text-white rounded-lg sm:hidden focus:outline-none">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -37,7 +38,8 @@
           <span class="sr-only">Open sidebar</span>
           <lucide-angular name="CustomMenu" class="mt-[2px]" [size]="24" [strokeWidth]="'1.5'"></lucide-angular>
         </button>
-        <span class="block sm:hidden text-xl text-[--anchor-link-color] dark:text-white">LOGO</span>
+        <img class="block sm:hidden object-fit w-[120px] h-[60px]" src="/assets/logo.png" alt="logo">
+        <!-- <span class="block sm:hidden text-xl text-[--anchor-link-color] dark:text-white">LOGO</span> -->
       </div>
       <div class="flex items-center gap-5">
         <label [ngClass]="darkMode ? 'bg-primary' : 'bg-stroke'" class="relative m-0 block h-7 w-14 rounded-full">

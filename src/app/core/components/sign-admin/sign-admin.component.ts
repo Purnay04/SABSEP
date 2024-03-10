@@ -26,7 +26,7 @@ export class SignAdminComponent {
           {
             fieldType: 'textbox',
             inputType: 'text',
-            label: 'Username',
+            label: 'Email Id',
             name: 'username',
             required: true,
             validators: [Validators.required],

@@ -1,0 +1,65 @@
+{
+  "appliedUsersCol": [
+    {
+      "columnName": "User Name",
+      "field": "userName",
+      "width": 200,
+      "sortable": true,
+      "resizable": true,
+      "applyFilter": true
+    },
+    {
+      "columnName": "Age",
+      "field": "age",
+      "width": 200,
+      "sortable": true,
+      "resizable": true,
+      "applyFilter": true
+    }
+  ],
+  "appliedUsers": {
+    "rowData": [
+      {"userName": "purnay barge", "age": 24}
+    ],
+    "totalRows": 1
+  },
+  "testConfigurationChangeLogsCol": [
+    {
+      "columnName": "Change Type",
+      "field": "changeType",
+      "width": 200,
+      "sortable": true,
+      "resizable": true,
+      "applyFilter": true
+    },
+    {
+      "columnName": "Change Message",
+      "field": "changeMsg",
+      "width": 200,
+      "sortable": true,
+      "resizable": true,
+      "applyFilter": false
+    },
+    {
+      "columnName": "User",
+      "field": "user",
+      "width": 200,
+      "sortable": true,
+      "resizable": true,
+      "applyFilter": true
+    }
+  ],
+  "testConfigurationChangeLogs": {
+    "rowData": [
+      {"changeType": 1, "changeMsg": "Change Message 8", "user": "user1"},
+      {"changeType": 1, "changeMsg": "Change Message 7", "user": "user2"},
+      {"changeType": 2, "changeMsg": "Change Message 6", "user": "user1"},
+      {"changeType": 3, "changeMsg": "Change Message 5", "user": "user3"},
+      {"changeType": 1, "changeMsg": "Change Message 4", "user": "user1"},
+      {"changeType": 1, "changeMsg": "Change Message 3", "user": "user4"},
+      {"changeType": 2, "changeMsg": "Change Message 2", "user": "user1"},
+      {"changeType": 3, "changeMsg": "Change Message 1", "user": "user1"}
+    ],
+    "totalRows": 8
+  }
+}

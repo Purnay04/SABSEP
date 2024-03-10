@@ -1,1 +1,42 @@
 <page-header [title]="'Test Configuration'"></page-header>
+<!-- <apx-chart
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart"
+    [xaxis]="chartOptions.xaxis"
+></apx-chart> -->
+<dl class="grid max-w-screen-xl gap-8 p-4 text-txtDarkColor grid-cols-3 dark:text-txtColor sm:p-8">
+  <div class="flex items-center justify-center">
+    <div class="relative flex flex-col items-center justify-center w-40 sm:w-72 p-4 bg-white dark:bg-slate-950 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <lucide-angular name="CustomExamPaper" class="my-icon mb-2" [size]="72" [strokeWidth]="'1.5'"></lucide-angular>
+      <dt class="mb-2 text-xl md:text-3xl font-semibold">40 Marks</dt>
+      <dd class="text-txtDarkColor dark:text-txtColor">Exam</dd>
+      <button class="relative mt-2 md:mt-0 md:absolute md:top-2 md:right-2 flex items-center gap-1" title="edit">
+        <lucide-angular name="Edit" class="my-icon hover:text-primary" [size]="18" [strokeWidth]="'1.5'"></lucide-angular>
+        <span class="md:hidden">Edit</span>
+      </button>
+    </div>
+  </div>
+  <div class="flex items-center justify-center">
+    <div class="relative flex flex-col items-center justify-center w-40 sm:w-72 p-4 bg-white dark:bg-slate-950 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <lucide-angular name="Clock9" class="my-icon mb-2" [size]="72" [strokeWidth]="'1.5'"></lucide-angular>
+      <dt class="mb-2 text-xl md:text-3xl font-semibold">30 Min</dt>
+      <dd class="text-txtDarkColor dark:text-txtColor">Duration</dd>
+      <button class="relative mt-2 md:mt-0 md:absolute md:top-2 md:right-2 flex items-center gap-1" title="edit">
+        <lucide-angular name="Edit" class="my-icon hover:text-primary" [size]="18" [strokeWidth]="'1.5'"></lucide-angular>
+        <span class="md:hidden">Edit</span>
+      </button>
+    </div>
+  </div>
+  <div class="flex items-center justify-center">
+    <div class="relative flex flex-col items-center justify-center w-40 sm:w-72 p-4 bg-white dark:bg-slate-950 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <lucide-angular name="CustomBookPile" class="my-icon mb-2" [size]="72" [strokeWidth]="'1.5'"></lucide-angular>
+      <dt class="mb-2 text-xl md:text-3xl font-semibold">2</dt>
+      <dd class="text-txtDarkColor dark:text-txtColor">Category</dd>
+      <button class="relative mt-2 md:mt-0 md:absolute md:top-2 md:right-2 flex items-center gap-1" title="edit">
+        <lucide-angular name="Edit" class="my-icon hover:text-primary" [size]="18" [strokeWidth]="'1.5'"></lucide-angular>
+        <span class="md:hidden">Edit</span>
+      </button>
+    </div>
+  </div>
+</dl>
+<ag-grid-handler class="basis-3/4" [gridName]="'testConfigurationChangeLogs'" [gridApiInfo]="gridApiInfo"></ag-grid-handler>
