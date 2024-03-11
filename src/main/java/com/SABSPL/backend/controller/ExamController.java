@@ -1,6 +1,7 @@
 package com.SABSPL.backend.controller;
 
 import com.SABSPL.backend.models.Exam.ExamAttempt;
+import com.SABSPL.backend.models.Exam.ExamAttemptAnswer;
 import com.SABSPL.backend.services.ExamService;
 import com.SABSPL.backend.services.QuestionsService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -40,12 +43,12 @@ public class ExamController {
     @PostMapping("/start")
     public ResponseEntity<?> startExam(HttpServletRequest request){
         String email = (String) request.getAttribute("email");
-        Optional<ExamAttempt> optionalExamAttempt = examService.getExamAttemptByEmail(email);
+        Optional<ExamAttempt> optionalExamAttempt = examService.getOptionalExamAttemptByEmail(email);
         if (optionalExamAttempt.isPresent()){
             ExamAttempt examAttempt = optionalExamAttempt.get();
 
             // USER LOGGED OUT AND IS ATTEMPTING
-            if (examAttempt.getAnswers()==null) return ResponseEntity.ok(examAttempt);
+            if (examAttempt.getQuestions()!=null) return ResponseEntity.ok(examAttempt);
 
             // WHEN USER HAS PASSED THE EXAM
             if (examAttempt.getScore()>THRESHOLD){
@@ -63,7 +66,7 @@ public class ExamController {
         long endTime =  startTime + totalTime;
         examAttempt.setEndTime(new Date(endTime));
         examAttempt.setQuestions(questionsService.getRandomNQuestions(NUMBER_OF_QUESTIONS_FOR_EXAM,null));
-        examAttempt.setAnswers(null);
+        examAttempt.setQuestionsAndAnswers(new HashMap<>());
         examService.addAttempt(examAttempt);
         scheduledExecutorService = Executors.newScheduledThreadPool(1);
         scheduledExecutorService.schedule(()->examFinishedScheduler(examAttempt.getId()),32, TimeUnit.MINUTES);
@@ -71,18 +74,31 @@ public class ExamController {
         return ResponseEntity.status(HttpStatus.CREATED).body(examAttempt);
     }
 
+    @PostMapping("/save-answers")
+    public ResponseEntity<?> saveAnswers(HttpServletRequest request, @RequestBody ExamAttemptAnswer answer) throws Exception {
+        String email = (String) request.getAttribute("email");
+        ExamAttempt examAttempt = examService.getExamAttemptByEmail(email);
+        HashMap<String, ArrayList<String>> answers = examAttempt.getQuestionsAndAnswers();
+        answers.put(answer.getQuestionId(), answer.getAnswer());
+        return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping("/end")
+    public ResponseEntity<?> endExam(HttpServletRequest request) throws Exception {
+        String email = (String) request.getAttribute("email");
+        ExamAttempt examAttempt = examService.getExamAttemptByEmail(email);
+//        TODO:DO SOMETHING
+        return ResponseEntity.accepted().build();
+    }
+
+
     // SCHEDULED AFTER 32 MINUTES
     // TO EVALUATE SCORE
     // IF FAILED SCHEDULE NEXT ATTEMPT AFTER 90 DAYS
     public void examFinishedScheduler(String id){
         try{
             ExamAttempt examAttempt = examService.getExamAttemptById(id);
-            if (examAttempt.getAnswers()==null){
-                examAttempt.setScore(0);
-            }
-            else{
-                examAttempt.setScore(examService.calculateScore(examAttempt.getAnswers()));
-            }
+            examAttempt.setScore(examService.calculateScore(examAttempt.getQuestionsAndAnswers()));
             examAttempt.setQuestions(null);
             examService.addAttempt(examAttempt);
             if (examAttempt.getScore()>THRESHOLD){

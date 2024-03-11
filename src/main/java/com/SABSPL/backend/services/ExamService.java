@@ -1,7 +1,6 @@
 package com.SABSPL.backend.services;
 
 import com.SABSPL.backend.models.Exam.ExamAttempt;
-import com.SABSPL.backend.models.Exam.ExamAttemptAnswer;
 import com.SABSPL.backend.models.Question;
 import com.SABSPL.backend.repository.ExamRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -33,13 +34,14 @@ public class ExamService {
                 ));
     }
 
-    public double calculateScore(ArrayList<ExamAttemptAnswer> examAttemptAnswerList) throws Exception {
-        float totalQuestions = examAttemptAnswerList.size();
+    public double calculateScore(HashMap<String,ArrayList<String>> examAttemptAnswers) throws Exception {
+        float totalQuestions = examAttemptAnswers.size();
         double totalCorrectAnswers = 0d;
-        for (ExamAttemptAnswer examAttemptAnswer:examAttemptAnswerList) {
-            Optional<Question> optionalQuestion = questionsService.getQuestionById(examAttemptAnswer.getQuestionId());
-            if (optionalQuestion.isEmpty()) throw new Exception("Question Not Found"); // TODO: ADD CUSTOM EXCEPTION
-            ArrayList<String> answers = (ArrayList<String>) examAttemptAnswer.getAnswer();
+        for (Map.Entry<String, ArrayList<String>> entry : examAttemptAnswers.entrySet()) {
+            String questionId = entry.getKey();
+            ArrayList<String> answers = entry.getValue();
+            Optional<Question> optionalQuestion = questionsService.getQuestionById(questionId);
+            if (optionalQuestion.isEmpty()) throw new Exception("Question Not Found"); // TODO: HANDLE IT PROPERLY;
             ArrayList<String> originalAnswers = optionalQuestion.get().getAnswers();
             float correctAnswersForCurrentQuestion = answers.stream().filter(ele -> originalAnswers.stream().anyMatch(crt->crt.equals(ele))).toArray().length;
             float totalCorrectOptionsForCurrentQuestion = originalAnswers.size();
@@ -57,12 +59,14 @@ public class ExamService {
         return examRepository.findById(id).orElseThrow();
     }
 
-    public Optional<ExamAttempt> getExamAttemptByEmail(String email){
+    public Optional<ExamAttempt> getOptionalExamAttemptByEmail(String email){
         return examRepository.findByEmail(email);
     }
 
-    public boolean examAttemptExistsByEmailId(String email){
-        return examRepository.existsByEmail(email);
+    public ExamAttempt getExamAttemptByEmail(String email) throws Exception {
+        Optional<ExamAttempt> optionalExamAttempt = examRepository.findByEmail(email);
+        if (optionalExamAttempt.isEmpty())  throw new Exception("Exam Attempt Not Found");
+        return optionalExamAttempt.get();
     }
 
     public void removeAttempt(String id){

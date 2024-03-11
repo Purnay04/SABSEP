@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Data
@@ -22,6 +23,6 @@ public class ExamAttempt {
     private Date endTime;
     private double score;
     private List<QuestionDTO> questions;
-    private ArrayList<ExamAttemptAnswer> answers;
+    private HashMap<String,ArrayList<String>> questionsAndAnswers;
 }
 
