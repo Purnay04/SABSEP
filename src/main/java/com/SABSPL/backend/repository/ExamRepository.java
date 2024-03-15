@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ExamRepository extends MongoRepository<ExamAttempt,String> {
-    Page<ExamAttempt> findAllByAnswersIsNotNull(Pageable pageable);
     boolean existsByEmail(String email);
     Optional<ExamAttempt> findByEmail(String email);
 }

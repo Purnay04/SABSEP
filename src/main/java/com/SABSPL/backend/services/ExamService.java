@@ -25,7 +25,7 @@ public class ExamService {
     }
 
     public Page<ExamAttempt> getAllExamAttempts(Optional<Integer> page, Optional<Integer> size,Optional<String> sortBy){
-        return examRepository.findAllByAnswersIsNotNull(
+        return examRepository.findAll(
                 PageRequest.of(
                         page.orElse(0),
                         size.orElse(20),
