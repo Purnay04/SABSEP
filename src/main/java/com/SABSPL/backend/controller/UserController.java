@@ -52,7 +52,7 @@ public class UserController {
         user.setRole(Role.ROLE_USER);
         userService.save(user);
         var jwt = jwtTokenUtil.generateToken(user);
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        return ResponseEntity.ok(new AuthenticationResponse(jwt, user.getUsername(), user.getEmail()));
     }
 
     @PostMapping("/login")
@@ -64,6 +64,6 @@ public class UserController {
         }
         final User user = userService.getUserByEmail(authenticationRequest.getUsername());
         var jwt = jwtTokenUtil.generateToken(user);
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        return ResponseEntity.ok(new AuthenticationResponse(jwt, user.getUsername(), user.getEmail()));
     }
 }
