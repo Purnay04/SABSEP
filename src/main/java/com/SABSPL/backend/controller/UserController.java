@@ -1,6 +1,6 @@
 package com.SABSPL.backend.controller;
 
-import com.SABSPL.backend.constanst.Role;
+import com.SABSPL.backend.constants.Role;
 import com.SABSPL.backend.models.AuthenticationRequest;
 import com.SABSPL.backend.models.AuthenticationResponse;
 import com.SABSPL.backend.models.User;
@@ -9,7 +9,6 @@ import com.SABSPL.backend.utils.JwtUtil;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

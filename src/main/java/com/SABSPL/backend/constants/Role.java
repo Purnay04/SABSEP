@@ -1,4 +1,4 @@
-package com.SABSPL.backend.constanst;
+package com.SABSPL.backend.constants;
 
 import lombok.Data;
 

@@ -1,5 +1,6 @@
 package com.SABSPL.backend.services;
 
+import com.SABSPL.backend.constants.Role;
 import com.SABSPL.backend.models.User;
 import com.SABSPL.backend.repository.UserRepository;
 import lombok.Data;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Data
 @Service
@@ -34,6 +36,10 @@ public class UserService implements UserDetailsService{
 
     public User getUserByEmail(String email)throws UsernameNotFoundException{
         return userRepository.findByEmail(email);
+    }
+
+    public List<User> getAllCandidates() {
+        return userRepository.findAllByRole(Role.ROLE_USER);
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(String role_user) {
