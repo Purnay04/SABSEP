@@ -24,6 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QuestionsService {
     private final QuestionsRepository questionsRepository;
+    private final ExamVariableService examVariableService;
     private final MongoTemplate mongoTemplate;
 
     public void saveQuestion(Question question){
@@ -44,11 +45,16 @@ public class QuestionsService {
 
     public Page<CategoryView> getAllCategories(Pageable pageable){
         Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.group("category").count().as("numberOfQuestions"),
-                Aggregation.project("numberOfQuestions").and("_id").as("name")
+                Aggregation.group("category").count().as("totalNumberOfQuestions"),
+                Aggregation.project("totalNumberOfQuestions").and("_id").as("name")
         );
         var result = mongoTemplate.aggregate(aggregation, "question",CategoryView.class);
-        return new PageImpl<>(result.getMappedResults(),pageable,result.getMappedResults().size());
+        var resultList = result.getMappedResults();
+        var examVariables = examVariableService.getAllExamVariables();
+        for (var element:resultList){
+            element.setNumberOfQuestionsInExam(examVariables.getCategories().getOrDefault(element.getName(),0));
+        }
+        return new PageImpl<>(resultList,pageable,resultList.size());
     }
 
 }

@@ -6,5 +6,6 @@ import lombok.Data;
 @Data
 public class CategoryView extends RowDataView {
     private String name;
-    private int numberOfQuestions;
+    private int totalNumberOfQuestions;
+    private int numberOfQuestionsInExam;
 }

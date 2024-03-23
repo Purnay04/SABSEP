@@ -5,14 +5,15 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Data
-@Document("examVariables")
+@Document("exam_variables")
 public class ExamVariables {
 
     @Id
     private String id;
     private int totalMarks;
-    private ArrayList<String> categories;
-    private int numberOfQuestions;
+    private HashMap<String,Integer> categories;
+    private float duration;
 }
