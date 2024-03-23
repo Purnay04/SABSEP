@@ -27,7 +27,7 @@ public class TableController {
     @GetMapping("/rowData/{tableName}")
     public ResponseEntity<?> getTable(@PathVariable String tableName,
                                       @RequestParam(name="page",defaultValue = "0") int page,
-                                      @RequestParam(name="size",defaultValue = "0") Integer size,
+                                      @RequestParam(name="size",defaultValue = "10") Integer size,
                                       @RequestParam(name="sortBy",defaultValue = "") String sortBy){
         return ResponseEntity.ok(tableService.getRowData(tableName,page,size,sortBy));
     }
