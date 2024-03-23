@@ -1,5 +1,6 @@
 package com.SABSPL.backend.controller;
 
+import com.SABSPL.backend.dto.QuestionDTO;
 import com.SABSPL.backend.services.TableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,7 @@ public class TableController {
 
     @GetMapping("/columnInfo/{tableName}")
     public ResponseEntity<?> getTableInfo(@PathVariable String tableName){
-
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok(tableService.getColumnInfo(tableName));
     }
 
     @GetMapping("/rowData/{tableName}")
@@ -29,7 +29,6 @@ public class TableController {
                                       @RequestParam("sortBy") Optional<String> sortBy,
                                       @RequestParam Optional<Integer> page,
                                       @RequestParam Optional<Integer> size){
-        System.out.println(tableName);
         return ResponseEntity.ok(tableService.getRowData(tableName, size, page, sortBy));
     }
 }

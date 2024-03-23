@@ -1,5 +1,6 @@
 package com.SABSPL.backend.dto;
 
+import com.SABSPL.backend.models.Column;
 import lombok.Data;
 
 import java.io.Serializable;

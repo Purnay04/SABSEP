@@ -1,6 +1,7 @@
 package com.SABSPL.backend.services;
 
 import com.SABSPL.backend.dto.QuestionDTO;
+import com.SABSPL.backend.dto.gridviews.CategoryView;
 import com.SABSPL.backend.models.Question;
 import com.SABSPL.backend.repository.QuestionsRepository;
 import lombok.Data;
@@ -12,10 +13,10 @@ import org.springframework.data.mongodb.core.aggregation.SampleOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Data
 @Service
 @RequiredArgsConstructor
 public class QuestionsService {
@@ -38,5 +39,10 @@ public class QuestionsService {
         return questionsRepository.findById(questionId);
     }
 
+    public List<CategoryView> getAllCategories(){
+        Aggregation aggregation = Aggregation.newAggregation(Aggregation.group("category").count().as("numberOfQuestions"));
+        mongoTemplate.aggregate(aggregation,"question",Object.class).getMappedResults();
+        return new ArrayList<>();
+    }
 
 }
