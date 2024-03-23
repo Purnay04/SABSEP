@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface ColumnRepository extends MongoRepository<Column,String> {
-    List<Column> findAllByGridName(GridName gridName);
+    List<Column> findAllByGridNameOrderByOrder(GridName gridName);
 }

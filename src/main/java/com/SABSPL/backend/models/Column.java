@@ -11,6 +11,7 @@ public class Column {
     private String field;
     private MetaData metaData;
     private GridName gridName;
+    private int order;
 }
 
 @Data

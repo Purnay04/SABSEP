@@ -34,14 +34,7 @@ public class TableService {
 
     public PageListView getColumnInfo(String gridName){
         PageListView view = new PageListView();
-        switch(GridName.valueOf(gridName)) {
-            case APPLIED_USERS:
-                view.setColumnInfo(columnRepository.findAllByGridName(GridName.APPLIED_USERS));
-                break;
-            case CATEGORY_LIST:
-
-                break;
-        }
+        view.setColumnInfo(columnRepository.findAllByGridNameOrderByOrder(GridName.valueOf(gridName)));
         return view;
     }
 }
