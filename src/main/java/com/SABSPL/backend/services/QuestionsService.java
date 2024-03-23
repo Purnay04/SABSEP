@@ -58,4 +58,8 @@ public class QuestionsService {
         return new PageImpl<>(resultList,pageable,resultList.size());
     }
 
+    public long getCountByCategory(String category){
+        return questionsRepository.countByCategory(category);
+    }
+
 }
