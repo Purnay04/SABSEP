@@ -12,14 +12,9 @@ import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/questions")
+@RequestMapping("/api/admin/questions")
 public class QuestionsController {
     private final QuestionsService questionsService;
-
-    @GetMapping("/random")
-    public ResponseEntity<?> getQuestions(@RequestParam Optional<String> category){
-        return ResponseEntity.ok(questionsService.getRandomNQuestions(5,category.orElse(null)));
-    }
 
     @PostMapping("/add")
     public ResponseEntity<?> addQuestion(@RequestBody Question question){

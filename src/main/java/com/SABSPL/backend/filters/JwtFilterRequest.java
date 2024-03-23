@@ -1,5 +1,6 @@
 package com.SABSPL.backend.filters;
 
+import com.SABSPL.backend.constants.Role;
 import com.SABSPL.backend.services.UserService;
 import com.SABSPL.backend.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -47,6 +48,10 @@ public class JwtFilterRequest extends OncePerRequestFilter {
                 var role = claims.get("role");
                 var authorities = new ArrayList<SimpleGrantedAuthority>();
                 if (role!=null){
+                    if(request.getRequestURI().contains(Role.ROLE_ADMIN) && !role.equals(Role.ROLE_ADMIN)){
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        return;
+                    }
                     request.setAttribute("role",role);
                     authorities.add(new SimpleGrantedAuthority((String) role));
                 }
@@ -57,6 +62,7 @@ public class JwtFilterRequest extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
+
         chain.doFilter(request, response);
     }
 

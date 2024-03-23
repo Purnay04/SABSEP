@@ -33,13 +33,6 @@ public class ExamController {
     final int totalExamDuration = 20;
     final int NUMBER_OF_QUESTIONS_FOR_EXAM = 20;
 
-    @GetMapping("/attempts/all")
-    public ResponseEntity<?> getAllExamAttempts(@RequestParam Optional<Integer> page,
-                                                @RequestParam Optional<Integer> size,
-                                                @RequestParam Optional<String> sortBy){
-        return ResponseEntity.ok(examService.getAllExamAttempts(page,size,sortBy));
-    }
-
     @PostMapping("/start")
     public ResponseEntity<?> startExam(HttpServletRequest request){
         String email = (String) request.getAttribute("email");
