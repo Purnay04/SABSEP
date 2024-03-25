@@ -26,6 +26,8 @@ public class TableService {
             case CATEGORY_LIST:
                 view.setRowData(questionsService.getAllCategories(pageable));
                 break;
+            case QUESTIONS_LIST:
+                view.setRowData(questionsService.getAllQuestions(pageable,sortBy));
         }
         return view;
     }
@@ -35,4 +37,6 @@ public class TableService {
         view.setColumnInfo(columnRepository.findAllByGridNameOrderByOrder(GridName.valueOf(gridName)));
         return view;
     }
+
+
 }

@@ -1,5 +1,5 @@
 package com.SABSPL.backend.constants;
 
 public enum GridName {
-    APPLIED_USERS,CATEGORY_LIST
+    APPLIED_USERS,CATEGORY_LIST,QUESTIONS_LIST
 }

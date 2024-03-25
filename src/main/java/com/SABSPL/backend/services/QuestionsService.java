@@ -2,6 +2,7 @@ package com.SABSPL.backend.services;
 
 import com.SABSPL.backend.dto.QuestionDTO;
 import com.SABSPL.backend.dto.gridviews.CategoryView;
+import com.SABSPL.backend.dto.gridviews.QuestionView;
 import com.SABSPL.backend.models.Question;
 import com.SABSPL.backend.repository.QuestionsRepository;
 import lombok.Data;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,8 +60,9 @@ public class QuestionsService {
         return new PageImpl<>(resultList,pageable,resultList.size());
     }
 
-    public long getCountByCategory(String category){
-        return questionsRepository.countByCategory(category);
-    }
-
+        public Page<QuestionView> getAllQuestions(Pageable pageable, String sortBy){
+            var result = questionsRepository.findAll(pageable);
+            var questionViewList = result.toList().stream().map(ele->new QuestionView(ele.getQuestion(),ele.getCategory(),true,true)).collect(Collectors.toList());
+            return new PageImpl<QuestionView>(questionViewList,pageable,result.getTotalElements());
+        }
 }
