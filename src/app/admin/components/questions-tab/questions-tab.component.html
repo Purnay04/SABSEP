@@ -1,0 +1,12 @@
+<page-header [title]="'Questions List'"></page-header>
+<ag-grid-handler class="px-4" [gridName]="'questions_list'" [gridHeaderTemplate]="QuestionListGridHeader">
+</ag-grid-handler>
+<ng-template #QuestionListGridHeader>
+  <div class="!p-2 w-full flex justify-between">
+    <span>abcd</span>
+    <button class="flex items-center gap-1 outline-btn !w-40 h-[1rem] !text-[14px] !mb-2" (click)="addQuestion()" title="add Category">
+      <lucide-angular name="FilePlus2" class="my-icon" [size]="18" [strokeWidth]="'2'"></lucide-angular>
+      Add Question
+    </button>
+  </div>
+</ng-template>

@@ -13,11 +13,13 @@ export class GridHandlerService {
   ) { }
 
   getRows(gridName: string, params: HttpParams) : Observable<any>{
-    // return this.http.get(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.ADMIN_LOGIN}`, {params: params});
-    return this.http.get(`http://localhost:3000/${gridName}`);
+    return this.http.get(`${API_CONFIG.baseUrl}${API_CONFIG.adminEndpoints.GRID_ROWDATA}/${gridName.trim().toUpperCase()}`, {params: params});
+    //{params: params}
+    // return this.http.get(`http://localhost:3000/${gridName}`);d
   }
 
   retrieveColumnDef(gridName: string) : Observable<any>{
-    return this.http.get(`http://localhost:3000/${gridName}Col`);
+    return this.http.get(`${API_CONFIG.baseUrl}${API_CONFIG.adminEndpoints.GRID_COLUMNINFO}/${gridName.trim().toUpperCase()}`);
+    // return this.http.get(`http://localhost:3000/${gridName}Col`);
   }
 }

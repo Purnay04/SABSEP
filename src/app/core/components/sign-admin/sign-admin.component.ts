@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormHandlerComponent } from 'src/app/shared/components/form-handler/form-handler.component';
 import { FormMeta, customTemplateRef } from 'src/app/shared/types/form';
 import { AuthService } from '../../../services/auth.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'sign-admin',
@@ -22,6 +23,8 @@ export class SignAdminComponent {
     formLabelOrientation: 'Vertical',
     formGroups: {
       loginForm: {
+        titlePresent: false,
+        designType: 'NormalLayout',
         controls: [
           {
             fieldType: 'textbox',
@@ -60,10 +63,15 @@ export class SignAdminComponent {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private messageService: MessageService
   ) {}
 
-  ngOnInit() { }
+  ngOnInit() {
+    if(this.authService.isLoggedIn() && !this.authService.checkTokenExpired()){
+      this.router.navigate(['admin','dashboard'])
+    }
+  }
 
   ngAfterViewInit() {
     this.showContent = true;
@@ -82,8 +90,21 @@ export class SignAdminComponent {
       .doLogin(formResponse[this.loginFormMeta.formName])
       .subscribe({
         next: (response: any) => {
-          this.authService.login(response.token);
+          this.authService.login(response);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: `Welcome back ${response.name}`
+          })
           this.router.navigate(['admin','dashboard']);
+        },
+        error: (err: any) => {
+          this.messageService.clear();
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error
+          })
         }
       })
   }

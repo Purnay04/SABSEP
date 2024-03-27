@@ -9,6 +9,9 @@ import { PageHeaderComponent } from './components/page-header/page-header.compon
 import { RouterModule } from '@angular/router';
 import { AgGridHandlerComponent } from './components/ag-grid-handler/ag-grid-handler.component';
 import { AgGridModule } from 'ag-grid-angular';
+import { MessagesModule } from 'primeng/messages';
+import { EditorModule } from 'primeng/editor';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,10 @@ import { AgGridModule } from 'ag-grid-angular';
     ReactiveFormsModule,
     LucideAngularModule,
     RouterModule,
-    AgGridModule
+    AgGridModule,
+    MessagesModule,
+    EditorModule,
+    DropdownModule
   ],
   exports: [
     FormHandlerComponent,

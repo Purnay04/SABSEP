@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { BreadcrumbService } from 'src/app/services/breadcrumb.service';
 import { ContextMenuMeta } from 'src/app/shared/directives/context-menu.directive';
+import { UserInfo } from 'src/app/shared/types/User';
 
 @Component({
   selector: 'app-admin-panel',
@@ -14,6 +15,7 @@ export class AdminPanelComponent {
   profileMenuMeta: ContextMenuMeta;
   darkMode: boolean = false;
   sidebarToggle: boolean = false;
+  userInfo!: UserInfo;
 
   constructor(
     private router: Router,
@@ -48,6 +50,7 @@ export class AdminPanelComponent {
       name: "Dashboard",
       url: "/admin/dashboard"
     });
+    this.userInfo = JSON.parse(localStorage.getItem('user_details') || "");
   }
 
   menuClickEventHandler(clickedLink: string) {

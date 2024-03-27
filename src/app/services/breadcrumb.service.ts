@@ -27,7 +27,7 @@ export class BreadcrumbService {
 
   popItem() {
     var currentItems = Array.from(this.getCurrent());
-    this.breadcrumbsItems$.next(currentItems.length > 0 ? new Set(currentItems.slice(0, currentItems.length)) : new Set([]));
+    this.breadcrumbsItems$.next(currentItems.length > 0 ? new Set(currentItems.slice(0, currentItems.length - 1)) : new Set([]));
   }
 
   clickEvent(clikedItem: BreadcrumbItem){

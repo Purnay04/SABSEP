@@ -4,6 +4,8 @@ import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { AdminPanelComponent } from "./components/admin-panel/admin-panel.component";
 import { TestConfigurationComponent } from "./components/test-configuration/test-configuration.component";
 import { AppliedUsersComponent } from "./components/applied-users/applied-users.component";
+import { QuestionsTabComponent } from "./components/questions-tab/questions-tab.component";
+import { QuestionFormComponent } from "./components/questions-tab/question-form/question-form.component";
 
 const routes: Routes = [
  {
@@ -26,6 +28,14 @@ const routes: Routes = [
     {
       path: 'appliedUsers',
       component: AppliedUsersComponent
+    },
+    {
+      path: 'questionsList',
+      component: QuestionsTabComponent,
+    },
+    {
+      path: 'questionForm',
+      component: QuestionFormComponent
     }
   ]
  }

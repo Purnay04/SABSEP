@@ -1,10 +1,19 @@
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
 
 import {
+  FormArray,
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { ControlBuilderStructure, FooterActions, FormGroupArrayTemplate, FormMeta, LabelOrientation, customTemplateRef } from '../../types/form';
+import {
+  ControlBuilderStructure,
+  FooterActions,
+  FormGroupArrayTemplate,
+  FormMeta,
+  LabelOrientation,
+  customTemplateRef,
+  FormArrayTemplate
+} from '../../types/form';
 
 @Component({
   selector: 'form-handler',
@@ -21,7 +30,10 @@ export class FormHandlerComponent implements OnInit {
   @Output('formSubmitEventHandler')
   onSubmit: EventEmitter<any> = new EventEmitter();
 
-  footerActions!: FooterActions;
+  @Output('closeEventEventHandler')
+  onClose: EventEmitter<any> = new EventEmitter();
+
+  footerActions!: FooterActions | undefined;
 
   formName!: string;
   formLabelOrientation: LabelOrientation = 'Horizontal';
@@ -42,21 +54,39 @@ export class FormHandlerComponent implements OnInit {
     this.createFormGroup(this.formMeta.formGroups);
   }
 
+  isFormArrayTemplate = (x: any) : x is FormArrayTemplate => x.controls != null;
+
   createFormGroup(formGroups: FormGroupArrayTemplate) {
     this.formGroupsInfo = formGroups;
     this.groupNames = Object.keys(formGroups);
-    var groups: { [groupName: string]: FormGroup } = {};
+    var groups: { [groupName: string]: FormGroup | FormArray } = {};
     this.groupNames.forEach((group) => {
-      var controls: ControlBuilderStructure = {};
-      formGroups[group].controls.forEach((control) => {
-        controls[control.name] = [
-          control.value || '',
-          control.validators || [],
-        ];
-      });
-      groups[group] = this.formBuilder.group(controls, {
-        validators: formGroups[group].groupLevelValidation || [],
-      });
+      // if(this.isFormArrayTemplate(formGroups[group])) {
+      //   var subGroupArray : FormGroup[] = [];
+      //   formGroups[group].controls.forEach((control) => {
+      //     var controls: ControlBuilderStructure = {}
+      //     controls[control.name] = [
+      //       control.value || '',
+      //       control.validators || [],
+      //     ];
+      //     subGroupArray.push(this.formBuilder.group(controls));
+      //   })
+      //   groups[group] = this.formBuilder.array(subGroupArray, {
+      //     validators: formGroups[group].validation || []
+      //   });
+      // }
+      // else {
+        var controls: ControlBuilderStructure = {};
+        formGroups[group].controls.forEach((control) => {
+          controls[control.name] = [
+            control.value || '',
+            control.validators || [],
+          ];
+        });
+        groups[group] = this.formBuilder.group(controls, {
+          validators: formGroups[group].validation || [],
+        });
+      // }
     });
     this.form = this.formBuilder.group(groups);
   }
@@ -64,5 +94,9 @@ export class FormHandlerComponent implements OnInit {
   handleSubmit() {
     console.log("handleSubmit:",this.form.getRawValue());
     this.onSubmit.emit(this.form.getRawValue());
+  }
+
+  closeEventHandler() {
+    this.onClose.emit();
   }
 }

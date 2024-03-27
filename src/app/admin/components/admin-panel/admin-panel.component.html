@@ -1,4 +1,4 @@
-<aside clickOutside [ignoreElements]="[toggleButton, closeSideBar]" (clickOutside)="sidebarToggle = false" id="dashboard-sidebar" [ngClass]="sidebarToggle ? 'translate-x-0' : '-translate-x-full'" class="absolute left-0 top-0 z-40 w-72 h-screen duration-300 ease-linear transition-transform sm:static sm:translate-x-0 -translate-x-full">
+<aside clickOutside [ignoreElements]="[toggleButton, closeSideBar]" (clickOutside)="sidebarToggle = false" id="dashboard-sidebar" [ngClass]="sidebarToggle ? 'translate-x-0' : '-translate-x-full'" class="fixed left-0 top-0 z-40 w-72 h-screen duration-300 ease-linear transition-transform sm:static sm:translate-x-0 -translate-x-full">
   <div class="h-full flex flex-col px-3 py-4 overflow-y-auto bg-slate-950">
     <div class="flex justify-between">
       <!-- <span class="text-xl text-txtColor">LOGO WITH NAME</span> -->
@@ -24,6 +24,11 @@
         <a (click)="sidebarToggle = false; breadcrumbService.clickEvent({name: 'Dashboard', url: '/admin/testConfig'})" routerLink="/admin/testConfig" routerLinkActive="active" class="flex items-center p-2 text-txtColor rounded-sm hover:bg-gray-800 dark:hover:bg-gray-700 group">
           <lucide-angular name="Layers3" class="my-icon"></lucide-angular>
           <span class="ms-3 text-inherit dark:text-inherit">Test Configuration</span>
+        </a>
+
+        <a (click)="sidebarToggle = false; breadcrumbService.clickEvent({name: 'Dashboard', url: '/admin/questionsList'})" routerLink="/admin/questionsList" routerLinkActive="active" class="flex items-center p-2 text-txtColor rounded-sm hover:bg-gray-800 dark:hover:bg-gray-700 group">
+          <lucide-angular name="BookOpenCheck" class="my-icon"></lucide-angular>
+          <span class="ms-3 text-inherit dark:text-inherit">Questions List</span>
         </a>
       </li>
     </ul>
@@ -62,8 +67,8 @@
           </button>
           <div id="userProfileDropdown" aria-labelledby="admin-menu-button" class="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-slate-950 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-100 dark:divide-gray-600">
             <div class="px-4 py-3 text-sm ">
-              <div>Mark Green</div>
-              <div class="font-medium truncate">markgreen@gmail.com</div>
+              <div>{{userInfo.username}}</div>
+              <div class="font-medium truncate">{{userInfo.email}}</div>
             </div>
             <div>
               <a href="#" class="flex px-4 py-2 gap-3 items-center hover:cursor-pointer">

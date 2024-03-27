@@ -6,6 +6,7 @@ import { SignAdminComponent } from './components/sign-admin/sign-admin.component
 import { SharedModule } from '../shared/shared.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './services/authInterceptor.service';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [

@@ -8,12 +8,17 @@ import { API_CONFIG } from 'src/app/api.config';
 })
 export class AuthService {
   private readonly TOKEN_KEY = 'jwt_token';
+  private readonly USER_DETAILS = 'user_details';
   constructor(
     private http: HttpClient
   ) { }
 
-  login(token: string): void {
-    localStorage.setItem(this.TOKEN_KEY, token);
+  login(response: any): void {
+    localStorage.setItem(this.TOKEN_KEY, response.jwt);
+    localStorage.setItem(this.USER_DETAILS, JSON.stringify({
+      username: response.name,
+      email: response.email
+    }));
   }
 
   logout(): void {
@@ -51,6 +56,6 @@ export class AuthService {
   }
 
   doLogin(loginPayload: any) : Observable<any> {
-    return this.http.post(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.ADMIN_LOGIN}`, loginPayload);
+    return this.http.post(`${API_CONFIG.baseUrl}${API_CONFIG.generalEndpoints.ADMIN_LOGIN}`, loginPayload);
   }
 }

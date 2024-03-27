@@ -10,11 +10,11 @@ export type FormMeta = {
   formName: string;
   formLabelOrientation: LabelOrientation;
   formGroups: FormGroupArrayTemplate;
-  footerActions: FooterActions;
+  footerActions?: FooterActions;
 };
 
 export type FooterActions = {
-  type: 'SingleFullWidth';
+  type: 'SingleFullWidth' | 'SplitInTwoActions';
   action: FormActionButton;
 };
 
@@ -23,12 +23,23 @@ export type FormActionButton = {
 };
 
 export type FormGroupArrayTemplate = {
-  [groupName: string]: FormGroupTemplate;
+  [groupName: string]: FormGroupTemplate | FormArrayTemplate;
 };
 
-export type FormGroupTemplate = {
+export type FormArrayTemplate = {
+  titlePresent: boolean,
+  title?: string,
+  designType?: 'TableLayout' | 'NormalLayout'
   controls: (FieldTextbox | FieldCheckbox)[];
-  groupLevelValidation?: ValidatorFn[];
+  validation?: ValidatorFn[];
+}
+
+export type FormGroupTemplate = {
+  titlePresent: boolean,
+  title?: string,
+  designType?: 'TableLayout' | 'NormalLayout'
+  controls: (FieldTextbox | FieldCheckbox | EditorField | TextAreaField | DropDownField)[];
+  validation?: ValidatorFn[];
 };
 
 export interface BaseField {
@@ -37,6 +48,7 @@ export interface BaseField {
   required: boolean;
   value?: string | number | boolean;
   validators?: ValidatorFn[];
+  hidden?: boolean;
 }
 
 export type FieldTextbox = BaseField & {
@@ -49,6 +61,29 @@ type IsFieldTextbox<T> = T extends FieldTextbox ? true : false;
 export type FieldCheckbox = BaseField & {
   fieldType: 'checkbox';
 };
+
+export type EditorField = BaseField & {
+  fieldType: 'editor';
+}
+
+export type TextAreaField = BaseField & {
+  fieldType: 'textArea',
+  cols: number,
+  rows: number
+}
+
+type IsFieldTextArea<T> = T extends TextAreaField ? true : false;
+
+type OptionType = {
+  name: string,
+  code: any
+}
+
+export type DropDownField = BaseField & {
+  fieldType: 'dropDown',
+  options: OptionType[],
+  width?: string
+}
 
 export type customTemplateRef = {
   [templateFor: string]: TemplateRef<any>;

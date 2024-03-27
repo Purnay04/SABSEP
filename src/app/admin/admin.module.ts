@@ -12,9 +12,11 @@ import {
   LayoutDashboard,
   Menu,
   Clock9,
-  Edit
+  Edit,
+  FilePlus2,
+  BookOpenCheck
 } from 'lucide-angular';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../core/services/authInterceptor.service';
@@ -29,6 +31,14 @@ import { AdminPanelComponent } from './components/admin-panel/admin-panel.compon
 import { TestConfigurationComponent } from './components/test-configuration/test-configuration.component';
 import { AppliedUsersComponent } from './components/applied-users/applied-users.component';
 import { NgxApexchartsModule } from 'ngx-apexcharts';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { DialogModule } from 'primeng/dialog';
+import { EditExamScoreComponent } from './components/edit-exam-score/edit-exam-score.component';
+import { MessagesModule } from 'primeng/messages';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { TCGridCellRendererComponent } from './components/test-configuration/test-configuration-grid-cell-renderer.component';
+import { QuestionsTabComponent } from './components/questions-tab/questions-tab.component';
+import { QuestionFormComponent } from './components/questions-tab/question-form/question-form.component';
 
 function svgToLucidIconData(svgString: string) {
   const parsed = parseSync(svgString);
@@ -49,7 +59,11 @@ function getLucideIcons(): LucideIcons {
     DashboardComponent,
     AdminPanelComponent,
     TestConfigurationComponent,
-    AppliedUsersComponent
+    AppliedUsersComponent,
+    EditExamScoreComponent,
+    TCGridCellRendererComponent,
+    QuestionsTabComponent,
+    QuestionFormComponent
   ],
   imports: [
     CommonModule,
@@ -57,7 +71,11 @@ function getLucideIcons(): LucideIcons {
     SharedModule,
     FormsModule,
     NgxApexchartsModule,
-    LucideAngularModule.pick({User, Settings, LogOut, Sun, Moon, Layers3, Users, LayoutDashboard, Menu, Clock9, Edit})
+    DynamicDialogModule,
+    DialogModule,
+    MessagesModule,
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
+    LucideAngularModule.pick({User, Settings, LogOut, Sun, Moon, Layers3, Users, LayoutDashboard, Menu, Clock9, Edit, FilePlus2, BookOpenCheck})
   ],
   providers: [
     {
@@ -69,7 +87,9 @@ function getLucideIcons(): LucideIcons {
       provide: LUCIDE_ICONS,
       multi: true,
       useValue: new LucideIconProvider(getLucideIcons())
-    }
-  ]
+    },
+    DialogService
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AdminModule { }

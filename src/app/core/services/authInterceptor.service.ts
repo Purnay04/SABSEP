@@ -17,11 +17,11 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const token = this.authService.getToken();
     if(token) {
-      // req = req.clone({
-      //   setHeaders: {
-      //     Authorization: `Bearer ${token}`,
-      //   }
-      // });
+      req = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
     }
     return next.handle(req);
   }

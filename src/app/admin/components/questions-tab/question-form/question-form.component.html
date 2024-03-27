@@ -1,0 +1,8 @@
+<page-header [title]="'Add Question'"></page-header>
+<div class="m-4 relative bg-white dark:bg-slate-950 rounded-lg shadow p-4 md:p-5 h-[74dvh]">
+  <form-handler
+    class="h-full"
+    [form]="questionFormMeta"
+    (formSubmitEventHandler)="submitEventHandler($event)">
+  </form-handler>
+</div>
