@@ -1,5 +1,5 @@
 package com.SABSPL.backend.services;
-
+import org.jsoup.Jsoup;
 import com.SABSPL.backend.dto.QuestionDTO;
 import com.SABSPL.backend.dto.gridviews.CategoryView;
 import com.SABSPL.backend.dto.gridviews.QuestionView;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +32,7 @@ public class QuestionsService {
     private final MongoTemplate mongoTemplate;
 
     public void saveQuestion(Question question){
+        question.setQuestionInShort(Jsoup.parse(question.getQuestion()).text());
         questionsRepository.save(question);
     }
 
@@ -62,7 +64,7 @@ public class QuestionsService {
 
         public Page<QuestionView> getAllQuestions(Pageable pageable, String sortBy){
             var result = questionsRepository.findAll(pageable);
-            var questionViewList = result.toList().stream().map(ele->new QuestionView(ele.getQuestion(),ele.getCategory(),true,true)).collect(Collectors.toList());
-            return new PageImpl<QuestionView>(questionViewList,pageable,result.getTotalElements());
+            var questionViewList = result.toList().stream().map(ele->new QuestionView(ele.getQuestionInShort(),ele.getCategory(),true,true)).collect(Collectors.toList());
+            return new PageImpl<>(questionViewList,pageable,result.getTotalElements());
         }
 }

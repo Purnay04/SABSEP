@@ -18,7 +18,7 @@ public class Question {
     private Boolean isMultipleChoice = false;
     @NonNull private ArrayList<String> answers;
     @NonNull private String category;
-
+    private String questionInShort;
     @CreatedDate
     private Date created_on;
 
