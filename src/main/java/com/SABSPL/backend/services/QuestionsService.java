@@ -64,7 +64,7 @@ public class QuestionsService {
 
         public Page<QuestionView> getAllQuestions(Pageable pageable, String sortBy){
             var result = questionsRepository.findAll(pageable);
-            var questionViewList = result.toList().stream().map(ele->new QuestionView(ele.getQuestionInShort(),ele.getCategory(),true,true)).collect(Collectors.toList());
+            var questionViewList = result.toList().stream().map(ele->new QuestionView(ele.getId(),ele.getQuestionInShort(),ele.getCategory(),true,true)).collect(Collectors.toList());
             return new PageImpl<>(questionViewList,pageable,result.getTotalElements());
         }
 }

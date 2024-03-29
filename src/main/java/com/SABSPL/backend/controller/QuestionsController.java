@@ -21,4 +21,11 @@ public class QuestionsController {
         questionsService.saveQuestion(question);
         return ResponseEntity.status(HttpStatus.CREATED).body("Question Added.");
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getQuestion(@PathVariable String id){
+        Optional<Question> optionalQuestion = questionsService.getQuestionById(id);
+        if (optionalQuestion.isEmpty()) return ResponseEntity.badRequest().body("");
+        return ResponseEntity.ok(optionalQuestion.get());
+    }
 }

@@ -3,14 +3,15 @@ package com.SABSPL.backend.dto.gridviews;
 import com.SABSPL.backend.dto.RowDataView;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class QuestionView extends RowDataView {
+    private String id;
     private String question;
     private String category;
-    private boolean edit=true;
-    private boolean delete=true;
+    private boolean edit;
+    private boolean delete;
 }
