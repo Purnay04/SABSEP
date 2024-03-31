@@ -52,7 +52,7 @@ public class ExamVariableService {
         }
 
         // Validate Hours.
-        if(!Pattern.matches("^\\d+(\\.\\d{2})?$", String.valueOf(duration)) && (duration % 1) * 100 > 59) {
+        if(duration<10f || !Pattern.matches("^\\d+(\\.\\d{2})?$", String.valueOf(duration)) && (duration % 1) * 100 > 59) {
             throw new ValidationException("Duration is not in valid format. Please provide it in 2.30(HH.MM) manner");
         }
     }

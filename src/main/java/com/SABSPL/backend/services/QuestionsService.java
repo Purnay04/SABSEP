@@ -30,6 +30,7 @@ public class QuestionsService {
     private final QuestionsRepository questionsRepository;
     private final ExamVariableService examVariableService;
     private final MongoTemplate mongoTemplate;
+    private final CategoryService categoryService;
 
     public void saveQuestion(Question question){
         question.setQuestionInShort(Jsoup.parse(question.getQuestion()).text());
@@ -55,9 +56,14 @@ public class QuestionsService {
         );
         var result = mongoTemplate.aggregate(aggregation, "question",CategoryView.class);
         var resultList = result.getMappedResults();
+        var categoryList = categoryService.getAllCategories();
         var examVariables = examVariableService.getAllExamVariables();
         for (var element:resultList){
             element.setNumberOfQuestionsInExam(examVariables.getCategories().getOrDefault(element.getName(),0));
+        }
+        for (String category:categoryList){
+            if(resultList.stream().anyMatch(ele->ele.getName().equals(category)))   continue;
+            resultList.add(new CategoryView(category,0,0));
         }
         return new PageImpl<>(resultList,pageable,resultList.size());
     }
