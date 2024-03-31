@@ -14,9 +14,17 @@ import java.util.regex.Pattern;
 public class ExamVariableService {
     private final ExamVariablesRepository examVariablesRepository;
     private final QuestionsRepository questionsRepository;
+    private final CategoryService categoryService;
 
     public ExamVariables getAllExamVariables(){
-        return examVariablesRepository.findAll().get(0);
+        ExamVariables examVariables = examVariablesRepository.findAll().get(0);
+        var examVariablesCategory = examVariables.getCategories();
+        var categoriesList = categoryService.getAllCategories();
+        for (String category:categoriesList){
+            if (examVariablesCategory.containsKey(category))    continue;
+            examVariablesCategory.put(category,0);
+        }
+        return examVariables;
     }
 
     public void saveExamVariables(ExamVariables examVariables) throws ValidationException {
