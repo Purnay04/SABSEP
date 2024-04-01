@@ -14,7 +14,10 @@ import {
   Clock9,
   Edit,
   FilePlus2,
-  BookOpenCheck
+  BookOpenCheck,
+  Eye,
+  Library,
+  Trash
 } from 'lucide-angular';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -33,12 +36,13 @@ import { AppliedUsersComponent } from './components/applied-users/applied-users.
 import { NgxApexchartsModule } from 'ngx-apexcharts';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { DialogModule } from 'primeng/dialog';
-import { EditExamScoreComponent } from './components/edit-exam-score/edit-exam-score.component';
+import { AddCategoryComponent } from './components/add-category/add-category.component';
 import { MessagesModule } from 'primeng/messages';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { TCGridCellRendererComponent } from './components/test-configuration/test-configuration-grid-cell-renderer.component';
 import { QuestionsTabComponent } from './components/questions-tab/questions-tab.component';
 import { QuestionFormComponent } from './components/questions-tab/question-form/question-form.component';
+import { QuestionGridCellRendererComponent } from './components/questions-tab/questions-grid-cell-renderer.component';
 
 function svgToLucidIconData(svgString: string) {
   const parsed = parseSync(svgString);
@@ -60,10 +64,11 @@ function getLucideIcons(): LucideIcons {
     AdminPanelComponent,
     TestConfigurationComponent,
     AppliedUsersComponent,
-    EditExamScoreComponent,
+    AddCategoryComponent,
     TCGridCellRendererComponent,
     QuestionsTabComponent,
-    QuestionFormComponent
+    QuestionFormComponent,
+    QuestionGridCellRendererComponent
   ],
   imports: [
     CommonModule,
@@ -75,7 +80,7 @@ function getLucideIcons(): LucideIcons {
     DialogModule,
     MessagesModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
-    LucideAngularModule.pick({User, Settings, LogOut, Sun, Moon, Layers3, Users, LayoutDashboard, Menu, Clock9, Edit, FilePlus2, BookOpenCheck})
+    LucideAngularModule.pick({User, Settings, LogOut, Sun, Moon, Layers3, Users, LayoutDashboard, Menu, Clock9, Edit, FilePlus2, BookOpenCheck, Eye, Library, Trash})
   ],
   providers: [
     {

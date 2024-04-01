@@ -19,4 +19,20 @@ export class AdminCoreService {
   saveExamConfiguration(formResponse: any) : Observable<any>{
     return this.http.post(`${API_CONFIG.baseUrl}${API_CONFIG.adminEndpoints.SAVE_TEST_CONFIIG}`, formResponse);
   }
+
+  addQuestion(payload: any): Observable<any> {
+    return this.http.post(`${API_CONFIG.baseUrl}${API_CONFIG.adminEndpoints.ADD_QUESTION}`, payload);
+  }
+
+  getAllCategories() : Observable<any> {
+    return this.http.get(`${API_CONFIG.baseUrl}${API_CONFIG.adminEndpoints.GET_CATEGORIES_LIST}`);
+  }
+
+  addCategory(payload: any): Observable<any> {
+    return this.http.post(`${API_CONFIG.baseUrl}${API_CONFIG.adminEndpoints.ADD_CATEGORY}`, payload);
+  }
+
+  getQuestion(qid: string) : Observable<any> {
+    return this.http.get(`${API_CONFIG.baseUrl}${API_CONFIG.adminEndpoints.GET_QUESTION}/${qid}`);
+  }
 }

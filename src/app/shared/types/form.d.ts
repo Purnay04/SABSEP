@@ -2,8 +2,12 @@ import { TemplateRef } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
 
 export type LabelOrientation = 'Vertical' | 'Horizontal';
+export type controlValueStructure = {
+  value: string | number | boolean,
+  disabled: boolean
+}
 export type ControlBuilderStructure = {
-  [controlName: string]: (string | number | boolean | ValidatorFn[])[];
+  [controlName: string]: (controlValueStructure | ValidatorFn[])[];
 };
 
 export type FormMeta = {
@@ -23,7 +27,7 @@ export type FormActionButton = {
 };
 
 export type FormGroupArrayTemplate = {
-  [groupName: string]: FormGroupTemplate | FormArrayTemplate;
+  [groupName: string]: FormGroupTemplate;
 };
 
 export type FormArrayTemplate = {
@@ -38,7 +42,8 @@ export type FormGroupTemplate = {
   titlePresent: boolean,
   title?: string,
   designType?: 'TableLayout' | 'NormalLayout'
-  controls: (FieldTextbox | FieldCheckbox | EditorField | TextAreaField | DropDownField)[];
+  controls: (FieldTextbox | FieldCheckbox | EditorField | TextAreaField | DropDownField | ChipsField)[];
+  styleClass?: string
   validation?: ValidatorFn[];
 };
 
@@ -46,6 +51,7 @@ export interface BaseField {
   label: string;
   name: string;
   required: boolean;
+  disabled?: boolean;
   value?: string | number | boolean;
   validators?: ValidatorFn[];
   hidden?: boolean;
@@ -84,6 +90,10 @@ export type DropDownField = BaseField & {
   options: OptionType[],
   width?: string
 }
+
+export type ChipsField = BaseField & {
+  fieldType: 'chipsField';
+};
 
 export type customTemplateRef = {
   [templateFor: string]: TemplateRef<any>;

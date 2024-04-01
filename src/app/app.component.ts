@@ -4,6 +4,10 @@ import { filter } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { initFlowbite } from 'flowbite';
 
+export function isNullOrUndefined<T>(obj: T | null | undefined): obj is null | undefined {
+  return obj === null || obj === undefined;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

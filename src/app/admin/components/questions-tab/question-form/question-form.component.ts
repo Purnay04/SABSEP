@@ -1,7 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MessageService } from 'primeng/api';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Subject, combineLatest, takeUntil } from 'rxjs';
+import { AdminCoreService } from 'src/app/admin/services/admin-core.service';
+import { isNullOrUndefined } from 'src/app/app.component';
 import { BreadcrumbService } from 'src/app/services/breadcrumb.service';
-import { FormMeta } from 'src/app/shared/types/form';
+import { DropDownField, FormMeta, TextAreaField } from 'src/app/shared/types/form';
+import { AddCategoryComponent } from '../../add-category/add-category.component';
+import { FormHandlerComponent } from 'src/app/shared/components/form-handler/form-handler.component';
 
 @Component({
   selector: 'app-question-form',
@@ -9,109 +18,244 @@ import { FormMeta } from 'src/app/shared/types/form';
   styleUrls: ['./question-form.component.scss']
 })
 export class QuestionFormComponent {
-  questionFormMeta!: FormMeta;
+  @ViewChild('addCategoryBtn') addCategoryButtonTemplateRef!: TemplateRef<any>;
+  @ViewChild('questionForm') questionFormComponent!: FormHandlerComponent;
+  private destroy$ = new Subject<void>();
+  mode: 'EDIT' | 'ADD' = 'ADD';
+  isPageLoaded: boolean = false;
+  dialogRef!: DynamicDialogRef;
+  customFormTemplate = {};
+  questionFormMeta: FormMeta = {
+    formName: 'testConfig',
+    formLabelOrientation: 'Vertical',
+    formGroups: {
+      questionForm: {
+        titlePresent: false,
+        designType: 'NormalLayout',
+        controls: [],
+      },
+      options: {
+        titlePresent: true,
+        title: 'Options',
+        designType: 'NormalLayout',
+        controls: []
+      }
+    },
+    footerActions: {
+      type: 'SplitInTwoActions',
+      action: {
+        name: 'Save',
+      },
+    },
+  };
   constructor(
-    private breadcrumbService : BreadcrumbService
+    private breadcrumbService : BreadcrumbService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private adminCoreService: AdminCoreService,
+    private messageService: MessageService,
+    private ngxSpinner: NgxSpinnerService,
+    public dialogService: DialogService
   ) { }
 
   ngOnInit() {
+    this.ngxSpinner.show('questionForm');
     this.breadcrumbService.addItem({
       name: "Questions Form",
       url: "/admin/questionForm"
     });
-    this.questionFormMeta = {
-      formName: 'testConfig',
-      formLabelOrientation: 'Vertical',
-      formGroups: {
-        questionForm: {
-          titlePresent: false,
-          designType: 'NormalLayout',
-          controls: [
-            {
-              fieldType: 'editor',
-              label: 'Question',
-              name: 'question',
-              required: true,
-              // value: this.examVariables.id || '',
-              // hidden: true,
-            },
-            {
-              fieldType: 'dropDown',
-              label: 'Category',
-              name: 'category',
-              required: true,
-              width: '20rem',
-              options: [
-                {
-                  name: 'Category 1',
-                  code: 'C1'
-                },
-                {
-                  name: 'Category 2',
-                  code: 'C2'
-                },
-                {
-                  name: 'Category 3',
-                  code: 'C3'
-                }
-              ],
-              validators: [Validators.required],
-              // value: this.examVariables.totalMarks
-            }
-          ],
-        },
-        optionsForm: {
-          titlePresent: true,
-          title: 'Options',
-          designType: 'NormalLayout',
-          controls: [
-            {
-              fieldType: 'textArea',
-              label: 'Option 1',
-              name: 'option1',
-              required: true,
-              rows: 4,
-              cols: 20,
-              validators: [Validators.required]
-            },
-            {
-              fieldType: 'textArea',
-              label: 'Option 2',
-              name: 'option2',
-              required: true,
-              rows: 4,
-              cols: 40,
-              validators: [Validators.required]
-            },
-            {
-              fieldType: 'textArea',
-              label: 'Option 3',
-              name: 'option3',
-              required: false,
-              rows: 4,
-              cols: 40
-            },
-            {
-              fieldType: 'textArea',
-              label: 'Option 4',
-              name: 'option4',
-              required: false,
-              rows: 4,
-              cols: 40
-            }
-          ]
+    this.route
+      .queryParams
+      .subscribe({
+        next: (params: any) => {
+          this.mode = params['mode'];
+          this.initializeForm(params['qid']);
         }
-      },
-      footerActions: {
-        type: 'SplitInTwoActions',
-        action: {
-          name: 'Save',
-        },
-      },
+      }
+    );
+  }
+
+  ngAfterViewInit() {
+    this.customFormTemplate = {
+      category: this.addCategoryButtonTemplateRef,
     };
   }
 
-  submitEventHandler(eventData: any) {
-    console.log("qf", eventData);
+  initializeForm(qid: string) {
+    if(this.mode === 'EDIT' && !isNullOrUndefined(qid)) {
+      var categoryList$ =  this.adminCoreService.getAllCategories();
+      var questionDetaills$ = this.adminCoreService.getQuestion(qid);
+      combineLatest([categoryList$, questionDetaills$])
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: ([categoryList, questionDetaills]) => {
+            var optionList: {name: string, code: any}[] = categoryList.map((category: any) => {
+              return {name: category, code: category}
+            })
+            this.fillControls(optionList, questionDetaills);
+            this.isPageLoaded = true;
+            this.ngxSpinner.hide('questionForm');
+          },
+          error: (err: any) => {
+            this.isPageLoaded = true;
+            this.ngxSpinner.hide('questionForm');
+          }
+        })
+      return
+    }
+    this.adminCoreService
+      .getAllCategories()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (categoryList: any) => {
+          var optionList: {name: string, code: any}[] = categoryList.map((category: any) => {
+            return {name: category, code: category}
+          })
+          this.fillControls(optionList);
+          this.isPageLoaded = true;
+          this.ngxSpinner.hide('questionForm');
+        },
+        error: (err: any) => {
+          this.isPageLoaded = true;
+          this.ngxSpinner.hide('questionForm');
+        }
+      })
+  }
+
+  fillControls(categoryList: {name: string, code: any}[], editingData?: any) {
+    this.questionFormMeta
+      .formGroups['questionForm'].controls = [
+        {
+          fieldType: 'textbox',
+          label: '',
+          name: 'id',
+          required: false,
+          value: (!isNullOrUndefined(editingData) && editingData.id) ? editingData.id : null,
+          hidden: true,
+        },
+        {
+          fieldType: 'editor',
+          label: 'Question',
+          name: 'question',
+          required: true,
+          value: (!isNullOrUndefined(editingData) && editingData.question) ? editingData.question : '',
+        },
+        {
+          fieldType: 'dropDown',
+          label: 'Category',
+          name: 'category',
+          required: true,
+          width: '20rem',
+          disabled: this.mode === 'EDIT',
+          options: !isNullOrUndefined(categoryList) ? categoryList : [],
+          validators: [Validators.required],
+          value: (!isNullOrUndefined(editingData) && editingData.category) ? editingData.category : ''
+        },
+        // {
+        //   fieldType: 'chipsField',
+        //   label: 'Answers',
+        //   name: 'answers',
+        //   required: true,
+        //   validators: [Validators.required],
+        // }
+    ]
+    var optionsAreas: TextAreaField[] = [];
+    for(var i = 0; i < 4; i++) {
+      optionsAreas.push({
+        fieldType: 'textArea',
+        label: `Option ${i + 1}`,
+        name: `option${i + 1}`,
+        required: (i == 0 || i == 1),
+        rows: 4,
+        cols: 20,
+        value: (!isNullOrUndefined(editingData) && editingData.options[i]) ? editingData.options[i] : '',
+        ...((i == 0 || i == 1) && {validators: [Validators.required]})
+      } as TextAreaField)
+    }
+    this.questionFormMeta
+      .formGroups['options'].controls = optionsAreas;
+  }
+
+  submitEventHandler(formResponse: any) {
+    let payload = {
+      ...formResponse.questionForm,
+      id: this.mode === 'ADD' ? null: formResponse.questionForm.id,
+      options: Object.keys(formResponse.options).map(opt => formResponse.options[opt]),
+      answers: ['0'],
+    }
+    console.log("qf", payload);
+    this.adminCoreService
+      .addQuestion(payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: any) => {
+          this.messageService.clear();
+          this.messageService.add({
+            severity: 'success',
+            detail: `Question ${this.mode === 'EDIT' ? 'Updated' : 'Added'} Successfully`
+          })
+          this.closeQuestionForm();
+        },
+        error: (err: any) => {
+          this.messageService.clear();
+          this.messageService.add({
+            severity: 'error',
+            detail: 'Something is Wrong!'
+          })
+        }
+      })
+
+  }
+
+  closeQuestionForm(eventData?: any) {
+    this.breadcrumbService.popItem();
+    this.router.navigate(['admin', 'questionsList']);
+  }
+
+  openDialog() {
+    this.dialogRef = this.dialogService.open(AddCategoryComponent, {
+      header: 'Add Category',
+      width: '30rem',
+      contentStyle: {
+        'max-height': 'fit-content',
+        overflow: 'auto',
+      },
+      modal: true,
+    });
+    this.dialogRef
+      .onClose
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (formResponse: any) => {
+          if(!isNullOrUndefined(formResponse.status) && formResponse.status === 'ADDED') {
+            this.refreshCategoryList();
+          }
+        }
+      })
+  }
+
+  refreshCategoryList() {
+    this.adminCoreService
+      .getAllCategories()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (newCategoryList: any) => {
+          var newOptionList: {name: string, code: any}[] = newCategoryList.map((category: any) => {
+            return {name: category, code: category}
+          })
+          var categoryControl: any= this.questionFormComponent
+                                        .formMeta.formGroups['questionForm']
+                                        .controls.filter(ctrl => ctrl.fieldType === 'dropDown' && ctrl.name === 'category');
+          if(!isNullOrUndefined(categoryControl)){
+            categoryControl[0].options.splice(0, categoryControl[0].options.length);
+            categoryControl[0].options.push(...newOptionList);
+          }
+        }
+      })
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

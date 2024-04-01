@@ -25,7 +25,9 @@
       </div>
       <div class="relative flex flex-col items-center justify-center w-full p-4 bg-white dark:bg-slate-950 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
         <lucide-angular name="Clock9" class="my-icon mb-2" [size]="72" [strokeWidth]="'1.5'"></lucide-angular>
-        <dt class="mb-2 text-xl md:text-3xl font-semibold">{{examVariables.duration}} Min</dt>
+        <dt class="mb-2 text-xl md:text-3xl font-semibold">
+          <span *ngIf="examVariables.duration >= 60">{{(examVariables.duration / 60) | floor }} Hr</span>&nbsp;<span *ngIf="(examVariables.duration % 60) > 0">{{examVariables.duration % 60}} Min</span>
+        </dt>
         <dd class="text-txtDarkColor dark:text-txtColor">Duration</dd>
         <button class="relative mt-2 md:mt-0 md:absolute md:top-2 md:right-2 flex items-center gap-1" (click)="editTestConfiguration()" title="edit">
           <lucide-angular name="Edit" class="my-icon hover:text-primary" [size]="18" [strokeWidth]="'1.5'"></lucide-angular>
@@ -36,15 +38,15 @@
         <lucide-angular name="CustomBookPile" class="my-icon mb-2" [size]="72" [strokeWidth]="'1.5'"></lucide-angular>
         <dt class="mb-2 text-xl md:text-3xl font-semibold">{{examVariables.categories.size}}</dt>
         <dd class="text-txtDarkColor dark:text-txtColor">Category</dd>
-        <button class="relative mt-2 md:mt-0 md:absolute md:top-2 md:right-2 flex items-center gap-1" (click)="showEditCategoryForm = true;showEditTestConfigurationForm = false" title="edit">
-          <lucide-angular name="Edit" class="my-icon hover:text-primary" [size]="18" [strokeWidth]="'1.5'"></lucide-angular>
+        <button class="relative mt-2 md:mt-0 md:absolute md:top-2 md:right-2 flex items-center gap-1" (click)="showViewCategoryForm = true;showEditTestConfigurationForm = false" title="edit">
+          <lucide-angular name="Eye" class="my-icon hover:text-primary" [size]="18" [strokeWidth]="'1.5'"></lucide-angular>
           <span class="md:hidden">Edit</span>
         </button>
       </div>
     </dl>
     <ag-grid-handler class="!h-80 sm:h-auto sm:basis-3/4" [gridName]="'testConfigurationChangeLogs'"></ag-grid-handler>
   </div>
-  <div *ngIf="showEditTestConfigurationForm" class="py-2 md:p-4 md:basis-[30rem]" [ngStyle]="showEditTestConfigurationForm ? {'display': 'block'} : {'display': 'none'}">
+  <div *ngIf="showEditTestConfigurationForm" class="py-2 md:px-4 md:pt-4 md:basis-[30rem]" [ngStyle]="showEditTestConfigurationForm ? {'display': 'block'} : {'display': 'none'}">
     <div class="relative bg-white dark:bg-slate-950 rounded-lg shadow px-4 md:px-5">
       <div class="flex items-center justify-between py-4 md:py-5 border-b rounded-t dark:border-gray-600">
           <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -55,20 +57,18 @@
         <form-handler
           class="pb-4"
           [form]="editConfigurationFormMeta"
-          [customTemplates]="customFormTemplate"
           (formSubmitEventHandler)="submitEventHandler($event)"
           (closeEventEventHandler)="closeTestConfigurationForm($event)">
         </form-handler>
       </div>
     </div>
   </div>
-  <div *ngIf="showEditCategoryForm" class="py-2 md:p-4 md:basis-[35rem]" [ngStyle]="showEditCategoryForm ? {'display': 'block'} : {'display': 'none'}">
+  <div *ngIf="showViewCategoryForm" class="py-2 md:p-4 md:basis-[35rem]" [ngStyle]="showViewCategoryForm ? {'display': 'block'} : {'display': 'none'}">
     <div class="relative bg-white dark:bg-slate-950 rounded-lg shadow px-4 md:px-5">
       <div class="flex items-center justify-between py-4 md:py-5 border-b rounded-t dark:border-gray-600">
           <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-              Edit Categories
+              View Categories
           </h3>
-          <ng-container [ngTemplateOutlet]="addCategoryBtn"></ng-container>
       </div>
       <div class="mt-2">
         <ag-grid-handler class="!h-80 sm:h-auto sm:basis-3/4" [pagination]="false" [gridName]="'category_list'"></ag-grid-handler>
@@ -81,11 +81,4 @@
     </div>
   </div>
 </div>
-
-<ng-template #addCategoryBtn>
-  <button class="flex items-center gap-1 outline-btn !w-40 h-[1rem] !text-[14px] !p-2 !mt-2" (click)="openDialog()" title="add Category">
-    <lucide-angular name="FilePlus2" class="my-icon" [size]="18" [strokeWidth]="'2'"></lucide-angular>
-    Add Category
-  </button>
-</ng-template>
 

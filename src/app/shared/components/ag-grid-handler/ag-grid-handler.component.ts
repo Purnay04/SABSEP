@@ -3,6 +3,7 @@ import { ColumnApi, GridApi, GridOptions, IDatasource, IGetRowsParams } from 'ag
 import { GridHandlerService } from '../../services/grid-handler.service';
 import { HttpParams } from '@angular/common/http';
 import { Message } from 'primeng/api';
+import { isNullOrUndefined } from 'src/app/app.component';
 
 export type GridApiInfo = {
   url : string,
@@ -20,6 +21,7 @@ export class AgGridHandlerComponent {
   @Input() paginationPageSize: number = 10;
   @Input() pagination: boolean = true;
   @Input() gridHeaderTemplate!: TemplateRef<any>;
+  @Input() cellRendererComponents: any
   cacheBlockSize: number = this.paginationPageSize;
   messagesList: Message[] = [];
 
@@ -43,8 +45,9 @@ export class AgGridHandlerComponent {
       rowModelType: 'infinite',
       pagination: this.pagination,
       paginationPageSize: this.paginationPageSize,
-      cacheBlockSize: this.paginationPageSize, // Equal to paginationPageSize
+      cacheBlockSize:  this.paginationPageSize, // Equal to paginationPageSize
       maxBlocksInCache: 0, // Disables caching
+      valueCache: false,
       suppressDragLeaveHidesColumns: true,
       onColumnVisible: this.onColumnVisible.bind(this),
       onColumnMoved: this.onColumnMoved.bind(this),
@@ -54,20 +57,23 @@ export class AgGridHandlerComponent {
 
   prepareDataSource(component : AgGridHandlerComponent) : IDatasource {
     return {
+      rowCount: 0,
       getRows(params: IGetRowsParams) {
         component.gridApi.showLoadingOverlay();
         if(!!component.messagesList && component.messagesList.length > 0)
           component.messagesList.splice(0,component.messagesList.length);
         let httpParams = new HttpParams()
-          .set('page', params.startRow)
-          .set('size', params.endRow)
-          .set('sort', JSON.stringify(params.sortModel[0]))
+          .set('page', params.startRow / (params.endRow - params.startRow))
+          .set('size', params.endRow - params.startRow)
+          .set('sort', !isNullOrUndefined(params.sortModel[0]) ? `${params.sortModel[0].colId},${params.sortModel[0].sort}` : '')
           .set('filters', JSON.stringify(params.filterModel));
         component.gridHandler.getRows(component.gridName, httpParams)
           .subscribe({
             next: (response) => {
               params.successCallback(response.rowData.content, response.rowData.totalElements);
-              component.gridApi.hideOverlay();
+              setTimeout(() => {
+                component.gridApi.hideOverlay();
+              }, 500);
               component.gridApi.sizeColumnsToFit();
             },
             error: (err: any) => {
@@ -119,8 +125,8 @@ export class AgGridHandlerComponent {
             applyButton: true
           }
         }),
-        ...(!!col.cellRenderer && {
-          cellRenderer: col.cellRenderer
+        ...(!!col.metaData.cellRenderer && {
+          cellRenderer: col.metaData.cellRenderer
         })
       }
     })
@@ -144,9 +150,12 @@ export class AgGridHandlerComponent {
   }
 
   private onPaginationChanged(event: any) {
-    if (event.newPageSize) {
+    if (this.pagination && event.newPageSize) {
       // this.cacheBlockSize = event.api.paginationGetPageSize();
       this.gridOptions.cacheBlockSize = event.newPageSize;
+      this.gridApi.purgeInfiniteCache();
+    } else if(this.pagination && event.newPage) {
+      this.gridApi.purgeInfiniteCache();
     }
   }
 

@@ -1,13 +1,13 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { BreadcrumbService } from 'src/app/services/breadcrumb.service';
-import { EditExamScoreComponent } from '../edit-exam-score/edit-exam-score.component';
 import { FieldTextbox, FormMeta } from 'src/app/shared/types/form';
 import { Validators } from '@angular/forms';
 import { AdminCoreService } from '../../services/admin-core.service';
 import { Subject, takeUntil } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MessageService } from 'primeng/api';
+import { AddCategoryComponent } from '../add-category/add-category.component';
 
 
 export type ExamVariables = {
@@ -23,17 +23,15 @@ export type ExamVariables = {
   styleUrls: ['./test-configuration.component.scss']
 })
 export class TestConfigurationComponent {
-  @ViewChild('addCategoryBtn') addCategoryButtonTemplateRef!: TemplateRef<any>;
   private destroy$ = new Subject<void>();
 
   dialogRef!: DynamicDialogRef;
 
   showEditTestConfigurationForm : boolean = false;
-  showEditCategoryForm: boolean = false;
+  showViewCategoryForm: boolean = false;
   examVariables!: ExamVariables;
   initialDataLoaded: boolean = false;
   editConfigurationFormMeta!: FormMeta;
-  customFormTemplate = {};
 
   constructor(
     private breadcrumbService : BreadcrumbService,
@@ -50,12 +48,6 @@ export class TestConfigurationComponent {
       name: "Test Configuration",
       url: "/admin/testConfig"
     })
-  }
-
-  ngAfterViewInit() {
-    this.customFormTemplate = {
-      testConfigCategory: this.addCategoryButtonTemplateRef,
-    };
   }
 
   getTestConfigurationDetails() {
@@ -79,7 +71,7 @@ export class TestConfigurationComponent {
   }
 
   openDialog() {
-    this.dialogRef = this.dialogService.open(EditExamScoreComponent, {
+    this.dialogRef = this.dialogService.open(AddCategoryComponent, {
       header: 'Add Category',
       width: '30rem',
       contentStyle: {
@@ -112,7 +104,7 @@ export class TestConfigurationComponent {
       return;
     }
     this.showEditTestConfigurationForm = true;
-    this.showEditCategoryForm = false;
+    this.showViewCategoryForm = false;
     this.editConfigurationFormMeta = {
       formName: 'testConfig',
       formLabelOrientation: 'Vertical',
@@ -153,6 +145,7 @@ export class TestConfigurationComponent {
           titlePresent: true,
           title: 'Category',
           designType: 'TableLayout',
+          styleClass: 'basis-48 overflow-y-auto pr-2',
           controls: [],
         }
       },
@@ -211,7 +204,8 @@ export class TestConfigurationComponent {
             severity: 'success',
             // summary: 'Success',
             detail: 'Test Configuration Updated Successfully'
-          })
+          });
+          this.showEditTestConfigurationForm = false;
           this.ngxSpinner.hide('testConfiguration')
         }
       }
@@ -223,7 +217,7 @@ export class TestConfigurationComponent {
   }
 
   closeEditCategoryForm() {
-    this.showEditCategoryForm = false;
+    this.showViewCategoryForm = false;
   }
 
   ngOnDestroy() {

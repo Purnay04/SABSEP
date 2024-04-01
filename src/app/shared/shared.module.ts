@@ -12,6 +12,9 @@ import { AgGridModule } from 'ag-grid-angular';
 import { MessagesModule } from 'primeng/messages';
 import { EditorModule } from 'primeng/editor';
 import { DropdownModule } from 'primeng/dropdown';
+import { CeilPipe } from './components/ceilPipe.component';
+import { FloorPipe } from './components/floorPipe.component';
+import { ChipsModule } from 'primeng/chips';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,9 @@ import { DropdownModule } from 'primeng/dropdown';
     ContextMenuDirective,
     ClickOutsideDirective,
     PageHeaderComponent,
-    AgGridHandlerComponent
+    AgGridHandlerComponent,
+    CeilPipe,
+    FloorPipe
   ],
   imports: [
     CommonModule,
@@ -29,14 +34,17 @@ import { DropdownModule } from 'primeng/dropdown';
     AgGridModule,
     MessagesModule,
     EditorModule,
-    DropdownModule
+    DropdownModule,
+    ChipsModule
   ],
   exports: [
     FormHandlerComponent,
     ContextMenuDirective,
     ClickOutsideDirective,
     PageHeaderComponent,
-    AgGridHandlerComponent
+    AgGridHandlerComponent,
+    CeilPipe,
+    FloorPipe
   ]
 })
 export class SharedModule { }

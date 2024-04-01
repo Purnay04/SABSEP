@@ -6,6 +6,7 @@
     class="ag-theme-custom-angular"
     [gridOptions]="gridOptions"
     [autoGroupColumnDef]="autoGroupColumnDef"
+    [components]="cellRendererComponents"
     [paginationPageSizeSelector]="[10, 20, 50, 100, 500]"
     (gridReady)="onGridReady($event)"
     rowSelection="single">

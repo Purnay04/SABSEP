@@ -14,6 +14,7 @@ import {
   customTemplateRef,
   FormArrayTemplate
 } from '../../types/form';
+import { isNullOrUndefined } from 'src/app/app.component';
 
 @Component({
   selector: 'form-handler',
@@ -79,7 +80,7 @@ export class FormHandlerComponent implements OnInit {
         var controls: ControlBuilderStructure = {};
         formGroups[group].controls.forEach((control) => {
           controls[control.name] = [
-            control.value || '',
+            {value: !isNullOrUndefined(control.value) ? control.value : '', disabled: control.disabled || false},
             control.validators || [],
           ];
         });
