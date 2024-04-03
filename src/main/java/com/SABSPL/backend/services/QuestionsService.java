@@ -1,4 +1,5 @@
 package com.SABSPL.backend.services;
+import com.SABSPL.backend.models.FilterRequest;
 import org.jsoup.Jsoup;
 import com.SABSPL.backend.dto.QuestionDTO;
 import com.SABSPL.backend.dto.gridviews.CategoryView;
@@ -16,6 +17,7 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.SampleOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -68,9 +70,16 @@ public class QuestionsService {
         return new PageImpl<>(resultList,pageable,resultList.size());
     }
 
-        public Page<QuestionView> getAllQuestions(Pageable pageable, String sortBy){
-            var result = questionsRepository.findAll(pageable);
-            var questionViewList = result.toList().stream().map(ele->new QuestionView(ele.getId(),ele.getQuestionInShort(),ele.getCategory(),true,true)).collect(Collectors.toList());
-            return new PageImpl<>(questionViewList,pageable,result.getTotalElements());
+        public Page<QuestionView> getAllQuestions(Pageable pageable, FilterRequest filterRequest){
+            Aggregation aggregation = Aggregation.newAggregation(
+                    Aggregation.sort(pageable.getSort()),
+                    Aggregation.limit(pageable.getPageSize()),
+                    Aggregation.skip(pageable.getPageSize()),
+                    Aggregation.match(Criteria.where(filterRequest.getKey()).regex(filterRequest.getValue()))
+            );
+
+            var result = mongoTemplate.aggregate(aggregation,"question",Question.class).getMappedResults();
+            var questionViewList = result.stream().map(ele->new QuestionView(ele.getId(),ele.getQuestionInShort(),ele.getCategory(),true,true)).collect(Collectors.toList());
+            return new PageImpl<>(questionViewList,pageable,result.size());
         }
 }

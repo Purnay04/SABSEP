@@ -1,8 +1,10 @@
 package com.SABSPL.backend.controller;
 
+import com.SABSPL.backend.exceptions.ValidationException;
 import com.SABSPL.backend.models.Exam.ExamAttempt;
 import com.SABSPL.backend.models.Exam.ExamAttemptAnswer;
 import com.SABSPL.backend.services.ExamService;
+import com.SABSPL.backend.services.ExamVariableService;
 import com.SABSPL.backend.services.QuestionsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,10 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +28,7 @@ public class ExamController {
     private final ExamService examService;
     private final QuestionsService questionsService;
     private ScheduledExecutorService scheduledExecutorService;
+    private final ExamVariableService examVariableService;
     final double THRESHOLD = 0.5d; //50%
     final int totalExamDuration = 20;
     final int NUMBER_OF_QUESTIONS_FOR_EXAM = 20;
@@ -53,6 +53,16 @@ public class ExamController {
             date = date.plusDays(90);
             return ResponseEntity.ok("Can be attempted again on "+date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         }
+        try{
+            examVariableService.validateExamVariables(examVariableService.getAllExamVariables());
+        }catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    "Something went wrong. Contact Admin."
+            );
+        } catch (Exception e){
+            return ResponseEntity.internalServerError().body("");
+        }
+
         ExamAttempt examAttempt = new ExamAttempt();
         var startTime = System.currentTimeMillis();
         int totalTime = 60000*totalExamDuration;

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class CandidateService {
     private final MongoTemplate mongoTemplate;
 
-    Page<CandidateView> getAllCandidates(Pageable pageable, String sortBy){
+    Page<CandidateView> getAllCandidates(Pageable pageable){
         AggregationResults<CandidateView> aggregationResults = mongoTemplate.aggregate(
                 Aggregation.newAggregation(
                         Aggregation.lookup(
@@ -29,7 +30,10 @@ public class CandidateService {
                                 "cd"),
                         Aggregation.match(Criteria.where("role").is(Role.ROLE_USER)),
                         Aggregation.unwind("cd"),
-                        Aggregation.project("cd.score","cd.startTime","email","username","id")
+                        Aggregation.project("cd.score","cd.startTime","email","username","id"),
+                        Aggregation.sort(pageable.getSort()),
+                        Aggregation.limit(pageable.getPageSize()),
+                        Aggregation.skip(pageable.getPageSize())
                 )
                 , "user",CandidateView.class);
         return new PageImpl<>(aggregationResults.getMappedResults(), pageable, aggregationResults.getMappedResults().size());

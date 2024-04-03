@@ -32,7 +32,7 @@ public class ExamVariableService {
         examVariablesRepository.save(examVariables);
     }
 
-    private void validateExamVariables(ExamVariables examVariables) throws ValidationException {
+    public void validateExamVariables(ExamVariables examVariables) throws ValidationException {
         var totalMarks = examVariables.getTotalMarks();
         var duration = examVariables.getDuration();
 
