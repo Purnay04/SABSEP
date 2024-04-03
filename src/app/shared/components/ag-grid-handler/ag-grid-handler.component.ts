@@ -175,13 +175,13 @@ export class AgGridHandlerComponent {
       let filterValue = filterObject[col]['filter']
       switch(filterObject[col]['type']) {
         case 'startsWith':
-          processedFilterObject[col] = new RegExp('^' + filterValue, 'i').toString()
+          processedFilterObject[col] = new RegExp('^' + filterValue).toString()
           break;
         case 'contains':
-          processedFilterObject[col] = new RegExp(filterValue, 'i').toString()
+          processedFilterObject[col] = new RegExp(filterValue).toString()
           break;
         case 'endsWith':
-          processedFilterObject[col] = new RegExp(filterValue + '$', 'i').toString();
+          processedFilterObject[col] = new RegExp(filterValue + '$').toString();
           break;
         case 'equals':
           processedFilterObject[col] = new RegExp('^' + filterValue + '$').toString();
