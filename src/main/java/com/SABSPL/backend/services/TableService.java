@@ -38,7 +38,7 @@ public class TableService {
         List<Criteria> criteriaList = new ArrayList<>();
         HashMap<String,String> filters = filterRequest.getFilters();
         MatchOperation matchOperation  = new MatchOperation(new Criteria());
-        if (filters!=null){
+        if (filters!=null && !filters.isEmpty()){
             for (var ele: filters.entrySet()){
                 criteriaList.add(Criteria.where(ele.getKey()).regex(ele.getValue()));
             }
