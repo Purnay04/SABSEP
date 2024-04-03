@@ -11,13 +11,11 @@ import { BreadcrumbService } from "src/app/services/breadcrumb.service";
       <div *ngSwitchCase="'edit'">
         <button class="" (click)="editQuestion()" title="edit">
           <lucide-angular name="Edit" class="my-icon hover:text-primary" [size]="18" [strokeWidth]="'1.5'"></lucide-angular>
-          <span class="md:hidden">Edit</span>
         </button>
       </div>
       <div *ngSwitchCase="'delete'">
         <button class="" (click)="deleteQuestion()" title="edit">
           <lucide-angular name="Trash" class="my-icon hover:text-primary" [size]="18" [strokeWidth]="'1.5'"></lucide-angular>
-          <span class="md:hidden">Delete</span>
         </button>
       </div>
     </ng-container>

@@ -1,5 +1,13 @@
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.4)"
+  name="questionsTab"
+  type="ball-scale-multiple"
+  [fullScreen]="true"
+>
+</ngx-spinner>
 <page-header [title]="'Questions List'"></page-header>
 <ag-grid-handler
+  #QuestionsGrid
   class="px-4"
   [gridName]="'questions_list'"
   [gridHeaderTemplate]="QuestionListGridHeader"
@@ -7,7 +15,14 @@
 </ag-grid-handler>
 <ng-template #QuestionListGridHeader>
   <div class="!p-2 w-full flex justify-between">
-    <span>abcd</span>
+    <select
+      class="dropDown"
+      [(ngModel)]="categoryToFilter"
+      (change)="categoryGridLevelFilterHandler()"
+      name="categoryGridLevelFilter">
+      <option value="all">All</option>
+      <option [value]="opt.code" *ngFor="let opt of categoryList || []">{{opt.name}}</option>
+    </select>
     <button class="flex items-center gap-1 outline-btn !w-40 h-[1rem] !text-[14px] !mb-2" (click)="addQuestion()" title="add Category">
       <lucide-angular name="FilePlus2" class="my-icon" [size]="18" [strokeWidth]="'2'"></lucide-angular>
       Add Question

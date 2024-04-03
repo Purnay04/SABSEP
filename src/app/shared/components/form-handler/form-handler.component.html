@@ -114,8 +114,17 @@
                                 <ng-container *ngIf="customTemplateRef && customTemplateRef[control.name] !== null"
                                     [ngTemplateOutlet]="customTemplateRef[control.name]"></ng-container>
                             </div>
-                            <div [ngClass]="{'basis-52': formGroupsInfo[subForm].designType === 'TableLayout'}">
-                                <p-chips class="block" [disabled]="control.disabled || false" [formControlName]="control.name"></p-chips>
+                            <div class="flex flex-col" [ngClass]="{'basis-52': formGroupsInfo[subForm].designType === 'TableLayout'}">
+                                <p-chips
+                                    class="block"
+                                    separator=","
+                                    [disabled]="control.disabled || false"
+                                    [formControlName]="control.name"
+                                    [placeholder]="control.placeholder || ''"
+                                    (onAdd)="fieldChangeListener(subForm, control.name, control.fieldType, $event)">
+                                </p-chips>
+                                <ng-container *ngIf="customTemplateRef && customTemplateRef[control.name + 'Hint'] !== null"
+                                    [ngTemplateOutlet]="customTemplateRef[control.name + 'Hint']"></ng-container>
                                 <ng-container
                                     *ngIf="form.get(subForm)?.get(control.name)!.invalid &&
                                     (form.get(subForm)?.get(control.name)!.dirty || form.get(subForm)?.get(control.name)!.touched)">
@@ -160,6 +169,14 @@
                                         </div>
                                     </p-header> -->
                                 </p-editor>
+                                <ng-container
+                                    *ngIf="form.get(subForm)?.get(control.name)!.invalid &&
+                                    (form.get(subForm)?.get(control.name)!.dirty || form.get(subForm)?.get(control.name)!.touched)">
+                                    <span *ngIf="form.get(subForm)?.get(control.name)?.errors!['required']"
+                                        class="text-red-500 dark:text-red-500 text-base">
+                                        {{control.label}} is required.
+                                    </span>
+                                </ng-container>
                             </div>
                         </div>
                     </ng-container>
@@ -183,10 +200,10 @@
 
         </div>
         <div class="flex gap-4">
-            <button class="outline-btn" (click)="closeEventHandler()">
+            <button type="button" class="outline-btn" (click)="closeEventHandler()">
                 Cancel
             </button>
-            <button class="primary-btn" [disabled]="form.invalid" (click)="handleSubmit()">
+            <button type="submit" class="primary-btn" [disabled]="form.invalid" (click)="handleSubmit()">
                 {{footerActions?.action?.name}}
             </button>
         </div>

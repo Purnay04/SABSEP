@@ -4,41 +4,6 @@
     gap: 1rem;
 }
 
-.textArea {
-    @apply block w-full rounded-md py-1 border-0
-    bg-[#F1F5F9] dark:bg-[#1A222C] text-txtDarkColor dark:text-txtColor
-    shadow-sm text-lg ring-1 ring-inset ring-gray-300
-    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary
-    sm:leading-6 invalid:ring-1 invalid:ring-inset invalid:ring-gray-800;
-}
-
-.textfield {
-    @apply block w-full h-9 rounded-md py-1 border-0
-    bg-[#F1F5F9] dark:bg-[#1A222C] text-txtDarkColor dark:text-txtColor
-    shadow-sm text-lg ring-1 ring-inset ring-gray-300
-    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary
-    sm:leading-6 invalid:ring-1 invalid:ring-inset invalid:ring-gray-800;
-}
-
-.dropDown {
-    @apply block min-w-64 h-9 rounded-md py-1 border-0
-    bg-[#F1F5F9] dark:bg-[#1A222C] text-txtDarkColor dark:text-txtColor
-    shadow-sm text-lg ring-1 ring-inset ring-gray-300
-    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary
-    sm:leading-6 invalid:ring-1 invalid:ring-inset invalid:ring-gray-800;
-}
-
-.checkbox {
-    @apply mt-1 h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary
-}
-
-.invalid {
-    @apply ring-1 ring-inset ring-red-500;
-}
-
-.requiredField {
-    @apply after:content-['*'] after:text-sm after:absolute after:m-0.5;
-}
 
 // button {
 //     @apply flex w-full justify-center

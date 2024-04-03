@@ -8,6 +8,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MessageService } from 'primeng/api';
 import { AddCategoryComponent } from '../add-category/add-category.component';
+import { Key } from 'lucide-angular';
 
 
 export type ExamVariables = {
@@ -190,8 +191,9 @@ export class TestConfigurationComponent {
         next: (response: any) => this.getTestConfigurationDetails(),
         error: (err: any) => {
           console.log(err);
-          this.messageService.clear();
+          this.messageService.clear('adminToast');
           this.messageService.add({
+            key: 'adminToast',
             severity: 'error',
             summary: 'Error',
             detail: err.error.ErrorMsg
@@ -199,10 +201,11 @@ export class TestConfigurationComponent {
           this.ngxSpinner.hide('testConfiguration')
         },
         complete: () => {
-          this.messageService.clear();
+          this.messageService.clear('adminToast');
           this.messageService.add({
+            key: 'adminToast',
             severity: 'success',
-            // summary: 'Success',
+            summary: 'Success',
             detail: 'Test Configuration Updated Successfully'
           });
           this.showEditTestConfigurationForm = false;

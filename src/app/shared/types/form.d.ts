@@ -3,7 +3,7 @@ import { ValidatorFn } from '@angular/forms';
 
 export type LabelOrientation = 'Vertical' | 'Horizontal';
 export type controlValueStructure = {
-  value: string | number | boolean,
+  value: string | number | boolean | string[],
   disabled: boolean
 }
 export type ControlBuilderStructure = {
@@ -52,7 +52,8 @@ export interface BaseField {
   name: string;
   required: boolean;
   disabled?: boolean;
-  value?: string | number | boolean;
+  placeholder?: string,
+  value?: string | number | boolean | string[];
   validators?: ValidatorFn[];
   hidden?: boolean;
 }

@@ -34,6 +34,9 @@ export class FormHandlerComponent implements OnInit {
   @Output('closeEventEventHandler')
   onClose: EventEmitter<any> = new EventEmitter();
 
+  @Input()
+  fieldChangeHandler!: any;
+
   footerActions!: FooterActions | undefined;
 
   formName!: string;
@@ -90,6 +93,13 @@ export class FormHandlerComponent implements OnInit {
       // }
     });
     this.form = this.formBuilder.group(groups);
+  }
+
+  fieldChangeListener(subFormName: string, controlName: string, fieldType: string, $event: any) {
+    let formControl = this.form.get(subFormName)?.get(controlName);
+    if(formControl && !!this.fieldChangeHandler) {
+      this.fieldChangeHandler(controlName, formControl, fieldType, $event);
+    }
   }
 
   handleSubmit() {

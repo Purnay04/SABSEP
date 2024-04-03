@@ -1,5 +1,5 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MessageService } from 'primeng/api';
@@ -20,6 +20,7 @@ import { FormHandlerComponent } from 'src/app/shared/components/form-handler/for
 export class QuestionFormComponent {
   @ViewChild('addCategoryBtn') addCategoryButtonTemplateRef!: TemplateRef<any>;
   @ViewChild('questionForm') questionFormComponent!: FormHandlerComponent;
+  @ViewChild('chipsHintCaption') chipsHintCaptionTemplateRef!: TemplateRef<any>;
   private destroy$ = new Subject<void>();
   mode: 'EDIT' | 'ADD' = 'ADD';
   isPageLoaded: boolean = false;
@@ -78,6 +79,7 @@ export class QuestionFormComponent {
   ngAfterViewInit() {
     this.customFormTemplate = {
       category: this.addCategoryButtonTemplateRef,
+      answersHint: this.chipsHintCaptionTemplateRef,
     };
   }
 
@@ -138,6 +140,7 @@ export class QuestionFormComponent {
           label: 'Question',
           name: 'question',
           required: true,
+          validators: [Validators.required],
           value: (!isNullOrUndefined(editingData) && editingData.question) ? editingData.question : '',
         },
         {
@@ -151,13 +154,15 @@ export class QuestionFormComponent {
           validators: [Validators.required],
           value: (!isNullOrUndefined(editingData) && editingData.category) ? editingData.category : ''
         },
-        // {
-        //   fieldType: 'chipsField',
-        //   label: 'Answers',
-        //   name: 'answers',
-        //   required: true,
-        //   validators: [Validators.required],
-        // }
+        {
+          fieldType: 'chipsField',
+          label: 'Answers',
+          name: 'answers',
+          required: true,
+          placeholder: 'Hint: 1, 2, 3',
+          validators: [Validators.required],
+          value: (!isNullOrUndefined(editingData) && editingData.answers) ? this.convertArrayToOptionList(editingData.answers) : []
+        }
     ]
     var optionsAreas: TextAreaField[] = [];
     for(var i = 0; i < 4; i++) {
@@ -166,7 +171,7 @@ export class QuestionFormComponent {
         label: `Option ${i + 1}`,
         name: `option${i + 1}`,
         required: (i == 0 || i == 1),
-        rows: 4,
+        rows: 2,
         cols: 20,
         value: (!isNullOrUndefined(editingData) && editingData.options[i]) ? editingData.options[i] : '',
         ...((i == 0 || i == 1) && {validators: [Validators.required]})
@@ -181,7 +186,7 @@ export class QuestionFormComponent {
       ...formResponse.questionForm,
       id: this.mode === 'ADD' ? null: formResponse.questionForm.id,
       options: Object.keys(formResponse.options).map(opt => formResponse.options[opt]),
-      answers: ['0'],
+      answers: formResponse.questionForm.answers.map((val: string) => val.replace("OPTION-", "")),
     }
     console.log("qf", payload);
     this.adminCoreService
@@ -189,16 +194,18 @@ export class QuestionFormComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response: any) => {
-          this.messageService.clear();
+          this.messageService.clear('adminToast');
           this.messageService.add({
+            key:'adminToast',
             severity: 'success',
             detail: `Question ${this.mode === 'EDIT' ? 'Updated' : 'Added'} Successfully`
           })
           this.closeQuestionForm();
         },
         error: (err: any) => {
-          this.messageService.clear();
+          this.messageService.clear('adminToast');
           this.messageService.add({
+            key: 'adminToast',
             severity: 'error',
             detail: 'Something is Wrong!'
           })
@@ -253,6 +260,34 @@ export class QuestionFormComponent {
         }
       })
   }
+
+  formFieldChangeHandler(controlName:string, formControl: FormControl, fieldType: string, event: any) {
+    console.log(`formFieldChangeHandler: ${controlName}, ${fieldType} ${formControl.getRawValue()}`);
+    let value = formControl.getRawValue();
+    if (!['1', '2', '3', '4'].includes(event.value) || value.filter((val: string)=> val.replace("OPTION-", "") === event.value).length > 1 || value.length > 3) {
+      // Remove the last chip added
+      value.pop();
+      formControl.setValue(value);
+      return; // Prevent adding the chip
+    }
+    formControl.setValue(this.convertArrayToOptionList(value));
+  }
+
+  validateChips(control: FormControl) {
+    const value = control.value;
+    if (value.length > 3) {
+      return { maxChips: true };
+    }
+    if (!value.every((v: any) => [1, 2, 3, 4].includes(v))) {
+      return { invalidValue: true };
+    }
+    return null;
+  }
+
+  convertArrayToOptionList(value : string[]) {
+    return value.map((val: string) => !val.startsWith("OPTION-") ? `OPTION-${val}` : val)
+  }
+
 
   ngOnDestroy() {
     this.destroy$.next();

@@ -65,16 +65,18 @@ export class AgGridHandlerComponent {
         let httpParams = new HttpParams()
           .set('page', params.startRow / (params.endRow - params.startRow))
           .set('size', params.endRow - params.startRow)
-          .set('sort', !isNullOrUndefined(params.sortModel[0]) ? `${params.sortModel[0].colId},${params.sortModel[0].sort}` : '')
-          .set('filters', JSON.stringify(params.filterModel));
-        component.gridHandler.getRows(component.gridName, httpParams)
+          .set('sortBy', !isNullOrUndefined(params.sortModel[0]) ? `${params.sortModel[0].colId},${params.sortModel[0].sort}` : '');
+        let filterObj = {
+          filters: component.prepareTextFilterObject(params.filterModel) || {}
+        };
+        component.gridHandler.getRows(component.gridName, httpParams, filterObj)
           .subscribe({
             next: (response) => {
               params.successCallback(response.rowData.content, response.rowData.totalElements);
               setTimeout(() => {
                 component.gridApi.hideOverlay();
               }, 500);
-              component.gridApi.sizeColumnsToFit();
+              // component.gridApi.sizeColumnsToFit();
             },
             error: (err: any) => {
               params.failCallback();
@@ -110,7 +112,7 @@ export class AgGridHandlerComponent {
   private processColumns(colDef: any[]) : any[]{
     return colDef.map(col => {
       return {
-        headerName: col.columnName,
+        headerName: col.name,
         field: col.field,
         minWidth: col.metaData.width || '200',
         // type: col.type || 'text',
@@ -120,6 +122,7 @@ export class AgGridHandlerComponent {
         ...(col.filter !== null && {
           filter: true,
           filterParams: {
+            suppressAndOrCondition: true,
             newRowsAction: 'keep',
             resetButton: true,
             applyButton: true
@@ -152,11 +155,42 @@ export class AgGridHandlerComponent {
   private onPaginationChanged(event: any) {
     if (this.pagination && event.newPageSize) {
       // this.cacheBlockSize = event.api.paginationGetPageSize();
-      this.gridOptions.cacheBlockSize = event.newPageSize;
+      // this.gridOptions.cacheBlockSize = event.newPageSize;
+      this.gridApi.setGridOption('cacheBlockSize', event.api.paginationGetPageSize());
       this.gridApi.purgeInfiniteCache();
     } else if(this.pagination && event.newPage) {
       this.gridApi.purgeInfiniteCache();
     }
+  }
+
+  addColumnFilters(filterByObj: any) {
+    this.gridApi.setFilterModel(filterByObj);
+    this.gridApi.onFilterChanged();
+  }
+
+  prepareTextFilterObject(filterObject: any) {
+    let columns: string[] = Object.keys(filterObject);
+    let processedFilterObject: {[column: string]: string} = {};
+    columns.forEach(col => {
+      let filterValue = filterObject[col]['filter']
+      switch(filterObject[col]['type']) {
+        case 'startsWith':
+          processedFilterObject[col] = new RegExp('^' + filterValue, 'i').toString()
+          break;
+        case 'contains':
+          processedFilterObject[col] = new RegExp(filterValue, 'i').toString()
+          break;
+        case 'endsWith':
+          processedFilterObject[col] = new RegExp(filterValue + '$', 'i').toString();
+          break;
+        case 'equals':
+          processedFilterObject[col] = new RegExp('^' + filterValue + '$').toString();
+          break;
+        default:
+          break;
+      }
+    });
+    return processedFilterObject;
   }
 
 }

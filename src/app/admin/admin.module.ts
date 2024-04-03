@@ -43,6 +43,7 @@ import { TCGridCellRendererComponent } from './components/test-configuration/tes
 import { QuestionsTabComponent } from './components/questions-tab/questions-tab.component';
 import { QuestionFormComponent } from './components/questions-tab/question-form/question-form.component';
 import { QuestionGridCellRendererComponent } from './components/questions-tab/questions-grid-cell-renderer.component';
+import { ToastModule } from 'primeng/toast';
 
 function svgToLucidIconData(svgString: string) {
   const parsed = parseSync(svgString);
@@ -79,6 +80,7 @@ function getLucideIcons(): LucideIcons {
     DynamicDialogModule,
     DialogModule,
     MessagesModule,
+    ToastModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
     LucideAngularModule.pick({User, Settings, LogOut, Sun, Moon, Layers3, Users, LayoutDashboard, Menu, Clock9, Edit, FilePlus2, BookOpenCheck, Eye, Library, Trash})
   ],

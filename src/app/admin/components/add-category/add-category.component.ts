@@ -53,8 +53,9 @@ export class AddCategoryComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: any) => {
-          this.messageService.clear();
+          this.messageService.clear('adminToast');
           this.messageService.add({
+            key: 'adminToast',
             severity: 'success',
             detail: 'Category Addedd Successfully'
           });
