@@ -2,8 +2,9 @@ package com.SABSPL.backend.models;
 
 import lombok.Data;
 
+import java.util.HashMap;
+
 @Data
 public class FilterRequest {
-    private String key;
-    private String value;
+    private HashMap<String,String> filters;
 }

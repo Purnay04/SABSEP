@@ -70,14 +70,13 @@ public class QuestionsService {
         return new PageImpl<>(resultList,pageable,resultList.size());
     }
 
-        public Page<QuestionView> getAllQuestions(Pageable pageable, FilterRequest filterRequest){
+        public Page<QuestionView> getAllQuestions(Pageable pageable,MatchOperation matchOperation){
             Aggregation aggregation = Aggregation.newAggregation(
                     Aggregation.sort(pageable.getSort()),
                     Aggregation.limit(pageable.getPageSize()),
                     Aggregation.skip(pageable.getPageSize()),
-                    Aggregation.match(Criteria.where(filterRequest.getKey()).regex(filterRequest.getValue()))
+                    matchOperation
             );
-
             var result = mongoTemplate.aggregate(aggregation,"question",Question.class).getMappedResults();
             var questionViewList = result.stream().map(ele->new QuestionView(ele.getId(),ele.getQuestionInShort(),ele.getCategory(),true,true)).collect(Collectors.toList());
             return new PageImpl<>(questionViewList,pageable,result.size());

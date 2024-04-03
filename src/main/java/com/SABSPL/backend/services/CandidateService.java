@@ -7,6 +7,7 @@ import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ import java.util.Optional;
 public class CandidateService {
     private final MongoTemplate mongoTemplate;
 
-    Page<CandidateView> getAllCandidates(Pageable pageable){
+    Page<CandidateView> getAllCandidates(Pageable pageable, MatchOperation matchOperation){
         AggregationResults<CandidateView> aggregationResults = mongoTemplate.aggregate(
                 Aggregation.newAggregation(
                         Aggregation.lookup(
@@ -33,7 +34,8 @@ public class CandidateService {
                         Aggregation.project("cd.score","cd.startTime","email","username","id"),
                         Aggregation.sort(pageable.getSort()),
                         Aggregation.limit(pageable.getPageSize()),
-                        Aggregation.skip(pageable.getPageSize())
+                        Aggregation.skip(pageable.getPageSize()),
+                        matchOperation
                 )
                 , "user",CandidateView.class);
         return new PageImpl<>(aggregationResults.getMappedResults(), pageable, aggregationResults.getMappedResults().size());
