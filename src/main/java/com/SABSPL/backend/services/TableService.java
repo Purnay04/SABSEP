@@ -40,10 +40,9 @@ public class TableService {
         MatchOperation matchOperation  = new MatchOperation(new Criteria());
         if (filters!=null && !filters.isEmpty()){
             for (var ele: filters.entrySet()){
-//                criteriaList.add(Criteria.where(ele.getKey()).regex(ele.getValue()));
-                matchOperation = new MatchOperation(Criteria.where(ele.getKey()).regex(ele.getValue()));
-                break;
+                criteriaList.add(Criteria.where(ele.getKey()).regex(ele.getValue().replaceAll("/","")));
             }
+            matchOperation = new MatchOperation(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
         }
         switch(GridName.valueOf(gridName)) {
             case APPLIED_USERS:
