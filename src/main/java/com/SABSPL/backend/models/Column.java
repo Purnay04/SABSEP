@@ -19,5 +19,6 @@ class MetaData {
     private String width;
     private boolean sortable;
     private boolean resizable;
+    private String sortBy;
     private String cellRenderer;
 }
