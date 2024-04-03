@@ -73,8 +73,8 @@ public class QuestionsService {
         public Page<QuestionView> getAllQuestions(Pageable pageable,MatchOperation matchOperation){
             Aggregation aggregation = Aggregation.newAggregation(
                     Aggregation.sort(pageable.getSort()),
+                    Aggregation.skip(pageable.getPageSize() * pageable.getPageNumber()),
                     Aggregation.limit(pageable.getPageSize()),
-                    Aggregation.skip(pageable.getPageSize()),
                     matchOperation
             );
             var result = mongoTemplate.aggregate(aggregation,"question",Question.class).getMappedResults();

@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor
 public class QuestionView extends RowDataView {
     private String id;
-    private String question;
+    private String questionInShort;
     private String category;
     private boolean edit;
     private boolean delete;
