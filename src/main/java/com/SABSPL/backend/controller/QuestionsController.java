@@ -19,7 +19,7 @@ public class QuestionsController {
     @PostMapping("/add")
     public ResponseEntity<?> addQuestion(@RequestBody Question question){
         questionsService.saveQuestion(question);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Question Added.");
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/{id}")
