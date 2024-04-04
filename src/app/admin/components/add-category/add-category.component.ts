@@ -62,6 +62,16 @@ export class AddCategoryComponent {
           this.dialogRef.close({
             status: 'ADDED'
           })
+        },
+        error: (err: any) => {
+          console.log(err);
+          this.messageService.clear('adminToast');
+          this.messageService.add({
+            key: 'adminToast',
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error.msg
+          });
         }
       })
   }

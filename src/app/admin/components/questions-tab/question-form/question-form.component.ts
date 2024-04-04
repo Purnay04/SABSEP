@@ -182,10 +182,20 @@ export class QuestionFormComponent {
   }
 
   submitEventHandler(formResponse: any) {
+    let errorMesssages : string[] = []
+    if(!this.validate(formResponse, errorMesssages) && errorMesssages.length > 0) {
+      this.messageService.add({
+        key: 'adminToast',
+        severity: 'error',
+        summary: 'Error',
+        detail: errorMesssages[0]
+      })
+      return;
+    }
     let payload = {
       ...formResponse.questionForm,
       id: this.mode === 'ADD' ? null: formResponse.questionForm.id,
-      options: Object.keys(formResponse.options).map(opt => formResponse.options[opt]),
+      options: Object.keys(formResponse.options).map(opt => formResponse.options[opt].trim()).filter(opt => opt !== null && opt !== ""),
       answers: formResponse.questionForm.answers.map((val: string) => val.replace("OPTION-", "")),
     }
     console.log("qf", payload);
@@ -212,6 +222,26 @@ export class QuestionFormComponent {
         }
       })
 
+  }
+
+  validate(formResponse: any, errorMesssages: string[]) : boolean {
+    let options = Object.keys(formResponse.options).map(opt => formResponse.options[opt].trim());
+    let answers = formResponse.questionForm.answers.map((val: string) => val.replace("OPTION-", ""));
+    if(answers.filter((ans : string) => ['1','2','3','4'].includes(ans)).length !== answers.length){
+      errorMesssages.push("Answer should be Option- 1, 2, 3, 4. Please check answers");
+      return false;
+    }
+    let notPresentOptions = answers.filter((ans : string) => options[Number(ans) - 1].trim() === "");
+    if(notPresentOptions.length > 0) {
+      errorMesssages.push(`Option should be present for answer : ${notPresentOptions.toString()}`);
+      return false;
+    }
+    options = options.filter(opt => opt !== null && opt !== "");
+    if(answers.length >= options.length) {
+      errorMesssages.push("Answers should not be greater than & equal to options. Please check options");
+      return false;
+    }
+    return true;
   }
 
   closeQuestionForm(eventData?: any) {
