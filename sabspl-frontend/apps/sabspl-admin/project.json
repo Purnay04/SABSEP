@@ -19,7 +19,11 @@
           "apps/sabspl-admin/src/favicon.ico",
           "apps/sabspl-admin/src/assets"
         ],
-        "styles": ["apps/sabspl-admin/src/styles.scss"],
+        "styles": [
+          "apps/sabspl-admin/src/styles.scss",
+          "node_modules/ngx-spinner/animations/ball-scale-multiple.css",
+          "node_modules/quill/dist/quill.snow.css"
+        ],
         "scripts": []
       },
       "configurations": {
