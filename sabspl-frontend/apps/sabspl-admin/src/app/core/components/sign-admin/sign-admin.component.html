@@ -1,0 +1,31 @@
+<div class="flex flex-col m-auto w-[36rem] p-8">
+    <div class="w-full flex flex-col gap-6">
+        <a href="#" class="m-auto">
+            <!-- <img src="https://dummyimage.com/150x50/000/fff" alt=" emoteflow-logo"> -->
+            <img class="object-fit w-[160px] h-[80px]" src="/assets/logo.png" alt="logo">
+        </a>
+        <div class="flex flex-col gap-4 m-auto text-center">
+            <h4 class="text-2xl font-semibold leading-7">Sign in</h4>
+            <p class="text-lg">Sign in to SABS Exam Portal - ADMIN</p>
+        </div>
+    </div>
+    <div class="px-10 py-6 w-full">
+        <form-handler *ngIf="showContent"
+         [form]="loginFormMeta"
+         [customTemplates]="customFormTemplate"
+         (formSubmitEventHandler)="submitEventHandler($event)">
+        </form-handler>
+    </div>
+    <div class="flex flex-col justify-center items-center pt-1 gap-6">
+        <!-- <span class="text-lg">
+            Don't have an account ? <a (click)="signupNav()">Signup now</a>
+        </span> -->
+        <span class="text-lg">
+            &#169; SABSEP. Crafted by PB
+        </span>
+    </div>
+</div>
+
+<ng-template #forgotPasswordTemplate>
+    <a href="#">Forgot your password?</a>
+</ng-template>

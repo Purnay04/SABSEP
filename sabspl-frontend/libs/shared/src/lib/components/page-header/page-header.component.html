@@ -1,0 +1,22 @@
+<h2 class="text-title-md2 font-semibold text-txtDarkColor dark:text-txtColor">
+  {{ title }}
+</h2>
+<nav>
+  <ol class="flex items-center gap-2">
+    <ng-container *ngIf="(breadcrumbService.breadcrumbsItems$| async) as breadcrumbs">
+    <li *ngFor="let item of breadcrumbs; let idx = index">
+      <a
+        class="font-medium cursor-pointer hover:text-inherit dark:hover:text-inherit"
+        (click)="breadcrumbService.clickEvent(item)"
+        [routerLink]="item.url" *ngIf="idx < (breadCrumbdsItems.length - 1); else activePage">
+          {{ item.name }} /
+      </a>
+      <ng-template #activePage>
+        <span class="hidden sm:block font-medium text-primary dark:text-primary">
+          {{ item.name }}
+        </span>
+      </ng-template>
+    </li>
+    </ng-container>
+  </ol>
+</nav>

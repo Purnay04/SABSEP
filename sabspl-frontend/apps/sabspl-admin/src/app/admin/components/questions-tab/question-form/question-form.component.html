@@ -1,0 +1,30 @@
+<page-header [title]="mode === 'ADD' ? 'Add' + ' Question' : 'Edit' + ' Question'"></page-header>
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.4)"
+  name="questionForm"
+  type="ball-scale-multiple"
+  [fullScreen]="true"
+>
+</ngx-spinner>
+<div *ngIf="isPageLoaded" class="m-4 relative bg-white dark:bg-slate-950 rounded-lg shadow p-4 md:p-5 h-[76dvh]">
+  <form-handler
+    #questionForm
+    class="h-full"
+    [form]="questionFormMeta"
+    [customTemplates]="customFormTemplate"
+    [fieldChangeHandler]="formFieldChangeHandler.bind(this)"
+    (formSubmitEventHandler)="submitEventHandler($event)"
+    (closeEventEventHandler)="closeQuestionForm($event)">
+  </form-handler>
+</div>
+
+<ng-template #addCategoryBtn>
+  <button type="button" *ngIf="mode === 'ADD'" class="flex items-center gap-1 outline-btn !w-40 h-[1rem] !text-[14px] !p-2 !mt-2" (click)="openDialog()" title="add Category">
+    <lucide-angular name="Library" class="my-icon" [size]="18" [strokeWidth]="'2'"></lucide-angular>
+    Add Category
+  </button>
+</ng-template>
+
+<ng-template #chipsHintCaption>
+  <span class="pt-1 opacity-60">Please Hit Enter/Comma to Add</span>
+</ng-template>

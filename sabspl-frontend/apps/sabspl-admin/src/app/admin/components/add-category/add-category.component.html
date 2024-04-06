@@ -1,0 +1,18 @@
+<form-handler
+  #AddCategoryForm
+  class="w-full pt-4"
+  [form]="formMeta">
+</form-handler>
+<div class="flex justify-between items-center pt-8 rounded-b dark:border-gray-600">
+  <div>
+
+  </div>
+  <div class="flex gap-4">
+    <button class="outline-btn" (click)="closeTestConfigurationForm()">
+      cancel
+    </button>
+    <button class="primary-btn" (click)="submitEventHandler()">
+      save
+    </button>
+  </div>
+</div>

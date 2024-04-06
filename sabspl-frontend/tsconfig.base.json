@@ -1,0 +1,24 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@sabspl-frontend/admin/*": ["apps/sabspl-admin/src/app/*"],
+      "@sabspl-frontend/shared": ["libs/shared/src/index.ts"],
+      "@sabspl-frontend/shared-module/*": ["libs/shared/src/lib/*"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

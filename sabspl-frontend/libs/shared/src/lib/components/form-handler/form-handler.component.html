@@ -1,0 +1,213 @@
+<form [formGroup]="form" class="flex flex-col gap-2 h-full">
+    <div class="overflow-y-auto px-2 flex flex-col">
+        <div *ngFor="let subForm of groupNames" class="flex flex-col gap-4 pb-2">
+            <div *ngIf="formGroupsInfo[subForm].titlePresent" class="flex mt-4 pb-4 items-center justify-between border-b rounded-t dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    {{formGroupsInfo[subForm].title}}
+                </h3>
+                <ng-container *ngIf="customTemplateRef && customTemplateRef[subForm] !== null"
+                                [ngTemplateOutlet]="customTemplateRef[subForm]"></ng-container>
+            </div>
+            <div [formGroupName]="subForm" class="flex flex-col gap-4 pb-2" [ngClass]="formGroupsInfo[subForm].styleClass">
+                <ng-container  *ngFor="let control of formGroupsInfo[subForm].controls">
+                    <ng-container *ngIf="control.hidden == null || (control.hidden != null && !control.hidden)" [ngSwitch]="control.fieldType">
+                        <div *ngSwitchCase="'textbox'" class="flex"
+                            [ngClass]="formGroupsInfo[subForm].designType === 'TableLayout' ? 'flex-row justify-between' : 'flex-col'">
+                            <div class="flex justify-between">
+                                <label [for]="control.name" class="text-md font-medium mb-1 relative"
+                                    [ngClass]="control.required ? 'requiredField' : ''">
+                                    {{control.label}}
+                                </label>
+                                <ng-container *ngIf="customTemplateRef && customTemplateRef[control.name] !== null"
+                                    [ngTemplateOutlet]="customTemplateRef[control.name]"></ng-container>
+                            </div>
+                            <div [ngClass]="{'basis-52': formGroupsInfo[subForm].designType === 'TableLayout'}">
+                                <input [disabled]="control.disabled || false" style="word-break: break-word;" [type]="(control.fieldType == 'textbox') && control.inputType" [name]="control.name" [formControlName]="control.name" class="textfield"
+                                    [ngClass]="{
+                                        'invalid': form.get(subForm)?.get(control.name)!.invalid && (form.get(subForm)?.get(control.name)!.dirty || form.get(subForm)?.get(control.name)!.touched),}" />
+                                <ng-container
+                                    *ngIf="form.get(subForm)?.get(control.name)!.invalid &&
+                                    (form.get(subForm)?.get(control.name)!.dirty || form.get(subForm)?.get(control.name)!.touched)">
+                                    <span *ngIf="form.get(subForm)?.get(control.name)?.errors!['required']"
+                                        class="text-red-500 dark:text-red-500 text-base">
+                                        {{control.label}} is required.
+                                    </span>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div *ngSwitchCase="'checkbox'" class="flex gap-2">
+                            <input [name]="control.name" [disabled]="control.disabled || false" type="checkbox" class="checkbox" clrCheckbox
+                                [formControlName]="control.name" />
+                            <label [for]="control.name" class="text-md font-medium pt-[3px]">
+                                {{control.label}}
+                            </label>
+                        </div>
+                        <div *ngSwitchCase="'textArea'" class="flex"
+                        [ngClass]="formGroupsInfo[subForm].designType === 'TableLayout' ? 'flex-row justify-between' : 'flex-col'">
+                            <div class="flex justify-between">
+                                <label [for]="control.name" class="text-md font-medium mb-1 relative"
+                                    [ngClass]="control.required ? 'requiredField' : ''">
+                                    {{control.label}}
+                                </label>
+                            </div>
+                            <div [ngClass]="{'basis-52': formGroupsInfo[subForm].designType === 'TableLayout'}">
+                                <textarea
+                                    class="textArea"
+                                    [disabled]="control.disabled || false"
+                                    [name]="control.name"
+                                    [cols]="((control.fieldType === 'textArea') && control.cols) || '20'"
+                                    [rows]="((control.fieldType === 'textArea') && control.rows) || '20'"
+                                    [formControlName]="control.name">
+                                </textarea>
+                                <ng-container
+                                    *ngIf="form.get(subForm)?.get(control.name)!.invalid &&
+                                    (form.get(subForm)?.get(control.name)!.dirty || form.get(subForm)?.get(control.name)!.touched)">
+                                    <span *ngIf="form.get(subForm)?.get(control.name)?.errors!['required']"
+                                        class="text-red-500 dark:text-red-500 text-base">
+                                        {{control.label}} is required.
+                                    </span>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div *ngSwitchCase="'dropDown'" class="flex"
+                            [ngClass]="formGroupsInfo[subForm].designType === 'TableLayout' ? 'flex-row justify-between' : 'flex-col'">
+                            <div class="flex justify-between items-center">
+                                <label [for]="control.name" class="text-md font-medium mb-1 relative"
+                                    [ngClass]="control.required ? 'requiredField' : ''">
+                                    {{control.label}}
+                                </label>
+                                <ng-container *ngIf="customTemplateRef && customTemplateRef[control.name] !== null"
+                                    [ngTemplateOutlet]="customTemplateRef[control.name]"></ng-container>
+                            </div>
+                            <div [ngClass]="{'basis-52': formGroupsInfo[subForm].designType === 'TableLayout'}">
+                                <!-- <p-dropdown
+                                    [formControlName]="control.name"
+                                    [options]="((control.fieldType === 'dropDown') && control.options) || []"
+                                    optionLabel="name"
+                                    placeholder="">
+                                </p-dropdown> -->
+                                <select
+                                    class="dropDown"
+                                    [disabled]="!!control.disabled"
+                                    [ngStyle]="((control.fieldType === 'dropDown') && control.width !== null) ? {'width': control.width} : {'width': 'inherit'}"
+                                    [formControlName]="control.name"
+                                    [name]="control.name" >
+                                    <option [value]="opt.code" *ngFor="let opt of ((control.fieldType === 'dropDown') && control.options) || []">{{opt.name}}</option>
+                                </select>
+                                <ng-container
+                                    *ngIf="form.get(subForm)?.get(control.name)!.invalid &&
+                                    (form.get(subForm)?.get(control.name)!.dirty || form.get(subForm)?.get(control.name)!.touched)">
+                                    <span *ngIf="form.get(subForm)?.get(control.name)?.errors!['required']"
+                                        class="text-red-500 dark:text-red-500 text-base">
+                                        {{control.label}} is required.
+                                    </span>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div *ngSwitchCase="'chipsField'" class="flex"
+                            [ngClass]="formGroupsInfo[subForm].designType === 'TableLayout' ? 'flex-row justify-between' : 'flex-col'">
+                            <div class="flex justify-between items-center">
+                                <label [for]="control.name" class="text-md font-medium mb-1 relative"
+                                    [ngClass]="control.required ? 'requiredField' : ''">
+                                    {{control.label}}
+                                </label>
+                                <ng-container *ngIf="customTemplateRef && customTemplateRef[control.name] !== null"
+                                    [ngTemplateOutlet]="customTemplateRef[control.name]"></ng-container>
+                            </div>
+                            <div class="flex flex-col" [ngClass]="{'basis-52': formGroupsInfo[subForm].designType === 'TableLayout'}">
+                                <p-chips
+                                    class="block"
+                                    separator=","
+                                    [disabled]="control.disabled || false"
+                                    [formControlName]="control.name"
+                                    [placeholder]="control.placeholder || ''"
+                                    (onAdd)="fieldChangeListener(subForm, control.name, control.fieldType, $event)">
+                                </p-chips>
+                                <ng-container *ngIf="customTemplateRef && customTemplateRef[control.name + 'Hint'] !== null"
+                                    [ngTemplateOutlet]="customTemplateRef[control.name + 'Hint']"></ng-container>
+                                <ng-container
+                                    *ngIf="form.get(subForm)?.get(control.name)!.invalid &&
+                                    (form.get(subForm)?.get(control.name)!.dirty || form.get(subForm)?.get(control.name)!.touched)">
+                                    <span *ngIf="form.get(subForm)?.get(control.name)?.errors!['required']"
+                                        class="text-red-500 dark:text-red-500 text-base">
+                                        {{control.label}} is required.
+                                    </span>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div *ngSwitchCase="'editor'" class="flex flex-col">
+                            <div class="flex justify-between">
+                                <label [for]="control.name" class="text-md font-medium mb-1 relative"
+                                    [ngClass]="control.required ? 'requiredField' : ''">
+                                    {{control.label}}
+                                </label>
+                            </div>
+                            <div>
+                                <p-editor [id]="control.name" [disabled]="control.disabled || false" [formControlName]="control.name" [style]="{ 'min-height': '240px' }">
+                                    <!-- <ng-template pTemplate="header">
+                                        <span class="ql-format-group">
+                                            <span title="Bold" class="ql-format-button ql-bold"></span>
+                                            <span class="ql-format-separator"></span>
+                                            <span title="Italic" class="ql-format-button ql-italic"></span>
+                                            <span class="ql-format-separator"></span>
+                                            <span title="Underline" class="ql-format-button ql-underline"></span>
+                                            <span class="ql-format-separator"></span>
+                                            <span title="Strikethrough" class="ql-format-button ql-strike"></span>
+                                        </span>
+                                    </ng-template> -->
+                                    <!-- <p-header>
+                                        <div id="toolbar-container">
+                                            <span title="Bold" class="ql-format-button ql-bold"></span>
+                                            <span class="ql-formats">
+                                                <select class="ql-size">
+                                                    <option value="24px">24</option>
+                                                    <option value="48px">48</option>
+                                                    <option value="100px">100</option>
+                                                    <option value="200px">200</option>
+                                                </select>
+                                            </span>
+                                        </div>
+                                    </p-header> -->
+                                </p-editor>
+                                <ng-container
+                                    *ngIf="form.get(subForm)?.get(control.name)!.invalid &&
+                                    (form.get(subForm)?.get(control.name)!.dirty || form.get(subForm)?.get(control.name)!.touched)">
+                                    <span *ngIf="form.get(subForm)?.get(control.name)?.errors!['required']"
+                                        class="text-red-500 dark:text-red-500 text-base">
+                                        {{control.label}} is required.
+                                    </span>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <ng-container *ngIf="footerActions?.type === 'SingleFullWidth'" [ngTemplateOutlet]="SingleFullWidth"></ng-container>
+    <ng-container *ngIf="footerActions?.type === 'SplitInTwoActions'" [ngTemplateOutlet]="SplitInTwoActions"></ng-container>
+</form>
+
+
+<ng-template #SingleFullWidth>
+    <button class="primary-btn" [disabled]="form.invalid" (click)="handleSubmit()">
+        {{footerActions?.action?.name}}
+    </button>
+</ng-template>
+<ng-template #SplitInTwoActions>
+    <div class="flex justify-between items-center pt-4 border-t border-gray-200 rounded-b dark:border-gray-600">
+        <div>
+
+        </div>
+        <div class="flex gap-4">
+            <button type="button" class="outline-btn" (click)="closeEventHandler()">
+                Cancel
+            </button>
+            <button type="submit" class="primary-btn" [disabled]="form.invalid" (click)="handleSubmit()">
+                {{footerActions?.action?.name}}
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #emptyTemplate></ng-template>

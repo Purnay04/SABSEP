@@ -1,0 +1,23 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+// button {
+//     @apply flex w-full justify-center
+//            rounded-md bg-primary px-3 py-2 text-base h-10 font-semibold leading-6 text-txtDarkColor dark:text-txtColor shadow-sm
+//            hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+//          focus-visible:outline-primary disabled:bg-white disabled:dark:bg-slate-900 disabled:text-black
+//            disabled:outline disabled:outline-2 disabled:outline-offset-2 disabled:outline-gray-400 disabled:dark:outline-gray-50 disabled:cursor-not-allowed
+// }
+
+/* Set dropdown font-families */
+#toolbar-container .ql-font span[data-label="MarathiFont"]::before {
+    font-family: "MarathiFont";
+}
+/* Set content font-families */
+.ql-editor {
+    font-family: "MarathiFont";
+}
