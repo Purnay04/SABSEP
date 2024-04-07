@@ -71,14 +71,15 @@ public class QuestionsService {
     }
 
         public Page<QuestionView> getAllQuestions(Pageable pageable,MatchOperation matchOperation){
+            final String COLLECTION_NAME = "question";
             Aggregation aggregation = Aggregation.newAggregation(
+                    matchOperation,
                     Aggregation.sort(pageable.getSort()),
                     Aggregation.skip(pageable.getPageSize() * pageable.getPageNumber()),
-                    Aggregation.limit(pageable.getPageSize()),
-                    matchOperation
+                    Aggregation.limit(pageable.getPageSize())
             );
-            var result = mongoTemplate.aggregate(aggregation,"question",Question.class).getMappedResults();
+            var result = mongoTemplate.aggregate(aggregation,COLLECTION_NAME,Question.class).getMappedResults();
             var questionViewList = result.stream().map(ele->new QuestionView(ele.getId(),ele.getQuestionInShort(),ele.getCategory(),true,true)).collect(Collectors.toList());
-            return new PageImpl<>(questionViewList,pageable,result.size());
+            return new PageImpl<>(questionViewList,pageable,mongoTemplate.count(new Query(),COLLECTION_NAME));
         }
 }

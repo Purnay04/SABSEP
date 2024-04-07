@@ -22,6 +22,7 @@ public class CandidateService {
     private final MongoTemplate mongoTemplate;
 
     Page<CandidateView> getAllCandidates(Pageable pageable, MatchOperation matchOperation){
+        final String COLLECTION_NAME = "user";
         AggregationResults<CandidateView> aggregationResults = mongoTemplate.aggregate(
                 Aggregation.newAggregation(
                         Aggregation.lookup(
@@ -37,7 +38,7 @@ public class CandidateService {
                         Aggregation.skip(pageable.getPageSize()),
                         matchOperation
                 )
-                , "user",CandidateView.class);
+                , COLLECTION_NAME,CandidateView.class);
         return new PageImpl<>(aggregationResults.getMappedResults(), pageable, aggregationResults.getMappedResults().size());
     }
 }
