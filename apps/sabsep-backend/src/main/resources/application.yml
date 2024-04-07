@@ -1,0 +1,19 @@
+server:
+  port: 8000
+spring:
+  application:
+    name: sabsep-backend
+  data:
+    mongodb:
+      uri: mongodb+srv://SABSEP:SABSEP@cluster0.cq7t3eo.mongodb.net/SABSEP-DB?retryWrites=true&w=majority&appName=Cluster0
+logging:
+  level:
+    root: ${LOG_LEVEL}
+  file:
+    name: ${LOG_FILE_PATH}
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){green} %clr([%level]){magenta}  %c{1.} [%t] %m%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%level] %c{1.} [%t] %m%n"
+app:
+  jwt-secret: LFItIWJlbFI9QXdUcHthLHE1eVcjdWpwbm13fVZje34heX5XMzhVWjhLS3QkandLdW8=
+  jwt-expiration-milliseconds: ${JWT-EXPIRATION-MILLISECONDS}

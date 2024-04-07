@@ -43,12 +43,15 @@
     "@angular/cli": "~17.3.0",
     "@angular/compiler-cli": "17.3.3",
     "@angular/language-service": "17.3.3",
+    "@biomejs/biome": "^1.5.3",
     "@nx/cypress": "18.2.3",
+    "@nx/eslint": "18.2.3",
     "@nx/eslint-plugin": "18.2.3",
     "@nx/jest": "18.2.3",
     "@nx/js": "18.2.3",
     "@nx/web": "18.2.3",
     "@nx/workspace": "18.2.3",
+    "@nxrocks/nx-spring-boot": "^10.0.1",
     "@schematics/angular": "17.3.3",
     "@types/jest": "^29.4.0",
     "@types/node": "18.16.9",
@@ -65,8 +68,6 @@
     "prettier": "^2.6.2",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",
-    "typescript": "5.4.4",
-    "@biomejs/biome": "^1.5.3",
-    "@nx/eslint": "18.2.3"
+    "typescript": "5.4.4"
   }
 }

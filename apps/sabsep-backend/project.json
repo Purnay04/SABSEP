@@ -1,0 +1,89 @@
+{
+  "name": "sabsep-backend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/sabsep-backend/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "apps/sabsep-backend",
+        "runFromParentModule": false
+      },
+      "dependsOn": [
+        "^install"
+      ],
+      "outputs": [
+        "{workspaceRoot}/apps/sabsep-backend/target"
+      ]
+    },
+    "install": {
+      "executor": "@nxrocks/nx-spring-boot:install",
+      "options": {
+        "root": "apps/sabsep-backend",
+        "runFromParentModule": false
+      },
+      "dependsOn": [
+        "^install"
+      ],
+      "outputs": [
+        "{workspaceRoot}/apps/sabsep-backend/target"
+      ]
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "apps/sabsep-backend",
+        "runFromParentModule": false
+      },
+      "outputs": [
+        "{workspaceRoot}/apps/sabsep-backend/target"
+      ]
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "apps/sabsep-backend",
+        "runFromParentModule": false
+      }
+    },
+    "run": {
+      "executor": "@nxrocks/nx-spring-boot:run",
+      "options": {
+        "root": "apps/sabsep-backend",
+        "runFromParentModule": false
+      },
+      "dependsOn": [
+        "^install"
+      ]
+    },
+    "serve": {
+      "executor": "@nxrocks/nx-spring-boot:serve",
+      "options": {
+        "root": "apps/sabsep-backend",
+        "runFromParentModule": false
+      },
+      "dependsOn": [
+        "^install"
+      ]
+    },
+    "build-image": {
+      "executor": "@nxrocks/nx-spring-boot:build-image",
+      "options": {
+        "root": "apps/sabsep-backend",
+        "runFromParentModule": false
+      },
+      "outputs": [
+        "{workspaceRoot}/apps/sabsep-backend/target"
+      ]
+    },
+    "build-info": {
+      "executor": "@nxrocks/nx-spring-boot:build-info",
+      "options": {
+        "root": "apps/sabsep-backend",
+        "runFromParentModule": false
+      }
+    }
+  },
+  "tags": []
+}
