@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### SKIP SOME APP Files / Folders ###
+app-data/**

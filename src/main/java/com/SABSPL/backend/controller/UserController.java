@@ -9,6 +9,8 @@ import com.SABSPL.backend.utils.JwtUtil;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/auth")
 public class UserController {
 
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final JwtUtil jwtTokenUtil;
@@ -59,6 +62,7 @@ public class UserController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
         }catch (Exception e){
+            logger.error(String.format("BadCredentialsException:: at signup controller: %s", e.getMessage()));
             return ResponseEntity.badRequest().body("Incorrect Username or Password");
         }
         final User user = userService.getUserByEmail(authenticationRequest.getUsername());

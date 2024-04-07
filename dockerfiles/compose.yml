@@ -1,0 +1,17 @@
+version: '1'
+services:
+  backend:
+    image: sabsep-backend-bootstrap:latest
+    container_name: sabsep-service
+    restart: always
+    build:
+      context: ../
+      dockerfile: ./dockerfiles/backend-bootstrap.Dockerfile
+    ports:
+      - 8000:8000
+    environment:
+      LOG_LEVEL: INFO
+      LOG_FILE_PATH: /var/sabsep/app.log
+      JWT-EXPIRATION-MILLISECONDS: 21600000
+    volumes:
+      - ../app-data:/var/sabsep:rw
