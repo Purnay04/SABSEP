@@ -1,8 +1,9 @@
 :host {
-  z-index: 31;
+  // z-index: 31;
   width: 100%;
   height: 100%;
   display: flex;
+  // @apply bg-[--page-bg-color] dark:bg-[--dark-page-bg-color];
 }
 
 .bg-stroke{
@@ -18,5 +19,5 @@
 }
 
 .active{
-  @apply bg-gray-800 text-primary;
+  @apply bg-[--dark-page-bg-color] text-primary;
 }

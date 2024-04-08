@@ -17,7 +17,8 @@ import {
   BookOpenCheck,
   Eye,
   Library,
-  Trash
+  Trash,
+  Trash2,
 } from 'lucide-angular';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -43,19 +44,29 @@ import { QuestionsTabComponent } from './components/questions-tab/questions-tab.
 import { QuestionFormComponent } from './components/questions-tab/question-form/question-form.component';
 import { QuestionGridCellRendererComponent } from './components/questions-tab/questions-grid-cell-renderer.component';
 import { ToastModule } from 'primeng/toast';
-import { AgGridHandlerComponent, ClickOutsideDirective, ContextMenuDirective, FloorPipe, FormHandlerComponent, PageHeaderComponent } from '@sabspl-frontend/shared';
+import {
+  AgGridHandlerComponent,
+  ClickOutsideDirective,
+  ContextMenuDirective,
+  FloorPipe,
+  FormHandlerComponent,
+  PageHeaderComponent,
+} from '@sabspl-frontend/shared';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
+import { AdminSettingsComponent } from './components/admin-settings/admin-settings.component';
 
 function svgToLucidIconData(svgString: string) {
   const parsed = parseSync(svgString);
-  console.log("svgToLucidIconData", parsed);
+  console.log('svgToLucidIconData', parsed);
   return parsed.children.map((n: INode) => [n.name, n.attributes]);
 }
 
 function getLucideIcons(): LucideIcons {
   let icons: any = {};
-  Object.keys(customSVGIcons).forEach(icon => {
+  Object.keys(customSVGIcons).forEach((icon) => {
     icons[icon] = svgToLucidIconData(customSVGIcons[icon]);
-  })
+  });
   return icons;
 }
 
@@ -69,7 +80,8 @@ function getLucideIcons(): LucideIcons {
     TCGridCellRendererComponent,
     QuestionsTabComponent,
     QuestionFormComponent,
-    QuestionGridCellRendererComponent
+    QuestionGridCellRendererComponent,
+    AdminSettingsComponent,
   ],
   imports: [
     CommonModule,
@@ -81,27 +93,47 @@ function getLucideIcons(): LucideIcons {
     MessagesModule,
     ToastModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
-    LucideAngularModule.pick({User, Settings, LogOut, Sun, Moon, Layers3, Users, LayoutDashboard, Menu, Clock9, Edit, FilePlus2, BookOpenCheck, Eye, Library, Trash}),
+    LucideAngularModule.pick({
+      User,
+      Settings,
+      LogOut,
+      Sun,
+      Moon,
+      Layers3,
+      Users,
+      LayoutDashboard,
+      Menu,
+      Clock9,
+      Edit,
+      FilePlus2,
+      BookOpenCheck,
+      Eye,
+      Library,
+      Trash,
+      Trash2,
+    }),
     AgGridHandlerComponent,
     FormHandlerComponent,
     PageHeaderComponent,
     FloorPipe,
     ContextMenuDirective,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    ConfirmDialogModule,
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi:true
+      multi: true,
     },
     {
       provide: LUCIDE_ICONS,
       multi: true,
-      useValue: new LucideIconProvider(getLucideIcons())
+      useValue: new LucideIconProvider(getLucideIcons()),
     },
-    DialogService
+    DialogService,
+    ConfirmationService,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AdminModule { }
+export class AdminModule {}

@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { QuestionGridCellRendererComponent } from './questions-grid-cell-renderer.component';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, catchError, of, switchMap, takeUntil } from 'rxjs';
 import { AdminCoreService } from '../../services/admin-core.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { BreadcrumbService } from '@sabspl-frontend/shared';
+import { BreadcrumbService, LockingResourceService } from '@sabspl-frontend/shared';
 import { AgGridHandlerComponent } from '@sabspl-frontend/shared';
 
 @Component({
@@ -25,7 +25,8 @@ export class QuestionsTabComponent {
     private breadcrumbService : BreadcrumbService,
     private router: Router,
     private adminCoreService : AdminCoreService,
-    private ngxSpinner: NgxSpinnerService
+    private ngxSpinner: NgxSpinnerService,
+    private lockingResourceService: LockingResourceService
   ) { }
 
   ngOnInit() {
@@ -34,9 +35,27 @@ export class QuestionsTabComponent {
       name: "Questions List",
       url: "/admin/questionsList"
     })
-    this.adminCoreService
-      .getAllCategories()
-      .pipe(takeUntil(this.destroy$))
+    let lockingResource$ = this.lockingResourceService
+                               .lockResource(this.router.url)
+                               .pipe(
+                                catchError(error => {
+                                  console.log(error);
+                                  return of('Error Value');
+                                })
+                               );
+    let getAllCategories$ = this.adminCoreService
+                                .getAllCategories()
+                                .pipe(
+                                  catchError(error => {
+                                    console.log(error);
+                                    return of('Error Value');
+                                  })
+                                 );
+    lockingResource$
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap(() => getAllCategories$)
+      )
       .subscribe({
         next: (optionList: any) => {
           this.categoryList = optionList.map((category: any) => {
@@ -68,6 +87,10 @@ export class QuestionsTabComponent {
   }
 
   ngOnDestroy() {
+    this.lockingResourceService
+      .unlockResource(this.router.url)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
     this.destroy$.next();
     this.destroy$.complete();
   }

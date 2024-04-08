@@ -6,6 +6,7 @@ import { TestConfigurationComponent } from "./components/test-configuration/test
 import { AppliedUsersComponent } from "./components/applied-users/applied-users.component";
 import { QuestionsTabComponent } from "./components/questions-tab/questions-tab.component";
 import { QuestionFormComponent } from "./components/questions-tab/question-form/question-form.component";
+import { AdminSettingsComponent } from "./components/admin-settings/admin-settings.component";
 
 const routes: Routes = [
  {
@@ -36,6 +37,10 @@ const routes: Routes = [
     {
       path: 'questionForm',
       component: QuestionFormComponent
+    },
+    {
+      path: 'settings',
+      component: AdminSettingsComponent
     }
   ]
  }

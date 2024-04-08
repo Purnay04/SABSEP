@@ -48,6 +48,9 @@ export class FormHandlerComponent implements OnInit {
   @Input()
   fieldChangeHandler!: any;
 
+  @Input()
+  formWrap: boolean = false;
+
   footerActions!: FooterActions | undefined;
 
   formName!: string;

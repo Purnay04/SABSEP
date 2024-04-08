@@ -1,5 +1,5 @@
 <aside clickOutside [ignoreElements]="[toggleButton, closeSideBar]" (clickOutside)="sidebarToggle = false" id="dashboard-sidebar" [ngClass]="sidebarToggle ? 'translate-x-0' : '-translate-x-full'" class="fixed left-0 top-0 z-40 w-72 h-screen duration-300 ease-linear transition-transform sm:static sm:translate-x-0 -translate-x-full">
-  <div class="h-full flex flex-col px-3 py-4 overflow-y-auto bg-slate-950">
+  <div class="h-full flex flex-col px-3 py-4 overflow-y-auto bg-[--dark-bg-color]">
     <div class="flex justify-between">
       <!-- <span class="text-xl text-txtColor">LOGO WITH NAME</span> -->
       <img class="w-[240px] h-[80px] object-cover" src="/assets/logo.png" alt="logo">
@@ -35,8 +35,8 @@
   </div>
 </aside>
 
-<div name="rightSide" class="mx-auto w-full flex flex-col">
-  <header class="bg-white dark:bg-slate-950 drop-shadow-2">
+<div name="rightSide" class="mx-auto w-full flex flex-col bg-[--page-bg-color] dark:bg-[--dark-page-bg-color]">
+  <header class="bg-white dark:bg-[--dark-bg-color] drop-shadow-2">
     <div class="h-16 flex justify-between items-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
       <div class="flex-shrink-0 flex items-center gap-2">
         <button #toggleButton name="toggleButton" (click)="sidebarToggle = !sidebarToggle" type="button" class="inline-flex items-center text-sm text-[--anchor-link-color] dark:text-white rounded-lg sm:hidden focus:outline-none">
@@ -60,30 +60,26 @@
           </span>
         </label>
         <div class="relative">
-          <button id="admin-menu-button" data-dropdown-toggle="userProfileDropdown" type="button" aria-hidden="true" aria-expanded="true" aria-haspopup="true" class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus-ring-offset-2 focus:ring-offset-gray-800 dark:focus:ring-gray-600">
+          <button id="admin-menu-button" data-dropdown-toggle="userProfileDropdown" type="button" aria-hidden="true" aria-expanded="false" aria-haspopup="true" class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus-ring-offset-2 focus:ring-offset-gray-800 dark:focus:ring-gray-600">
             <span class="absolute -inset-1.5"></span>
             <span class="sr-only">Open user menu</span>
             <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
           </button>
-          <div id="userProfileDropdown" aria-labelledby="admin-menu-button" class="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-slate-950 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-100 dark:divide-gray-600">
+          <div id="userProfileDropdown" aria-labelledby="admin-menu-button" class="hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-[--dark-bg-color] py-1 drop-shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-100 dark:divide-gray-600">
             <div class="px-4 py-3 text-sm ">
               <div>{{userInfo.username}}</div>
               <div class="font-medium truncate">{{userInfo.email}}</div>
             </div>
             <div>
-              <a href="#" class="flex px-4 py-2 gap-3 items-center hover:cursor-pointer">
-                <lucide-angular name="User" class="my-icon"></lucide-angular>
-                <span class="block text-sm text-inherit dark:text-inherit" id="admin-menu-item-0">Your Profile</span>
-              </a>
-              <a href="#" class="flex px-4 py-2 gap-3 items-center">
+              <a (click)="navigateToSettings()" class="flex px-4 py-2 gap-3 items-center hover:cursor-pointer">
                 <lucide-angular name="Settings" class="my-icon"></lucide-angular>
                 <span  class="block text-sm text-inherit dark:text-inherit" id="admin-menu-item-1">Settings</span>
               </a>
+              <a (click)="logout()" class="flex px-4 py-2 gap-3 items-center hover:cursor-pointer">
+                <lucide-angular name="LogOut" class="my-icon"></lucide-angular>
+                <span class="block text-sm text-inherit dark:text-inherit" id="admin-menu-item-2">Sign out</span>
+              </a>
             </div>
-            <a (click)="logout()" class="flex px-4 py-2 gap-3 items-center hover:cursor-pointer">
-              <lucide-angular name="LogOut" class="my-icon"></lucide-angular>
-              <span class="block text-sm text-inherit dark:text-inherit" id="admin-menu-item-2">Sign out</span>
-            </a>
           </div>
         </div>
       </div>
@@ -92,3 +88,28 @@
   <p-toast key="adminToast"></p-toast>
   <router-outlet></router-outlet>
 </div>
+<p-confirmDialog #cd>
+  <ng-template pTemplate="headless" let-message>
+    <div class="w-80 p-4 m-auto bg-[--bg-color] shadow-lg rounded-2xl dark:bg-[--dark-bg-color]">
+      <div class="w-full h-full text-center">
+          <div class="flex flex-col justify-between h-full">
+              <lucide-angular [name]="message.icon" class="my-icon self-center" [size]="48" [strokeWidth]="'2'"></lucide-angular>
+              <p class="mt-4 text-2xl font-bold text-[--txtDarkColor] dark:text-[--txtColor]">
+                {{ message.header }}
+              </p>
+              <p class="px-6 py-2 text-sm text-[--txtDarkColor] dark:text-[--txtColor]">
+                {{ message.message }}
+              </p>
+              <div class="flex items-center justify-between gap-4 mt-8">
+                  <button type="button" class="outline-btn" (click)="cd.reject()">
+                      Cancel
+                  </button>
+                  <button type="button" class="primary-btn" (click)="cd.accept()">
+                    Delete
+                </button>
+              </div>
+          </div>
+      </div>
+    </div>
+  </ng-template>
+</p-confirmDialog>

@@ -6,7 +6,7 @@
   [fullScreen]="true"
 >
 </ngx-spinner>
-<div *ngIf="isPageLoaded" class="m-4 relative bg-white dark:bg-slate-950 rounded-lg shadow p-4 md:p-5 h-[76dvh]">
+<div *ngIf="isPageLoaded" class="mx-4 relative bg-white dark:bg-slate-950 rounded-lg shadow p-4 md:p-5 h-[77dvh] md:h-[80dvh]">
   <form-handler
     #questionForm
     class="h-full"
@@ -19,7 +19,7 @@
 </div>
 
 <ng-template #addCategoryBtn>
-  <button type="button" *ngIf="mode === 'ADD'" class="flex items-center gap-1 outline-btn !w-40 h-[1rem] !text-[14px] !p-2 !mt-2" (click)="openDialog()" title="add Category">
+  <button type="button" *ngIf="mode === 'ADD'" class="flex items-center gap-1 outline-btn !w-40 h-[1rem] !text-[14px] !p-2 mb-4" (click)="openDialog()" title="add Category">
     <lucide-angular name="Library" class="my-icon" [size]="18" [strokeWidth]="'2'"></lucide-angular>
     Add Category
   </button>

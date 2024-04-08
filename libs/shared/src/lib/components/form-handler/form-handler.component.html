@@ -1,7 +1,7 @@
 <form [formGroup]="form" class="flex flex-col gap-2 h-full">
-    <div class="overflow-y-auto px-2 flex flex-col">
-        <div *ngFor="let subForm of groupNames" class="flex flex-col gap-4 pb-2">
-            <div *ngIf="formGroupsInfo[subForm].titlePresent" class="flex mt-4 pb-4 items-center justify-between border-b rounded-t dark:border-gray-600">
+    <div class="overflow-y-auto px-2 flex flex-col" [ngClass]="formWrap ? 'flex-wrap gap-x-8' : ''">
+        <div *ngFor="let subForm of groupNames; let idx = index" class="flex flex-col gap-4 pb-2">
+            <div *ngIf="formGroupsInfo[subForm].titlePresent" class="flex pb-2 items-center justify-between border-b rounded-t dark:border-gray-600">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                     {{formGroupsInfo[subForm].title}}
                 </h3>
@@ -12,7 +12,7 @@
                 <ng-container  *ngFor="let control of formGroupsInfo[subForm].controls">
                     <ng-container *ngIf="control.hidden == null || (control.hidden != null && !control.hidden)" [ngSwitch]="control.fieldType">
                         <div *ngSwitchCase="'textbox'" class="flex"
-                            [ngClass]="formGroupsInfo[subForm].designType === 'TableLayout' ? 'flex-row justify-between' : 'flex-col'">
+                            [ngClass]="formGroupsInfo[subForm].designType === 'TableLayout' ? 'flex-row justify-between gap-2' : 'flex-col'">
                             <div class="flex justify-between">
                                 <label [for]="control.name" class="text-md font-medium mb-1 relative"
                                     [ngClass]="control.required ? 'requiredField' : ''">
@@ -22,7 +22,12 @@
                                     [ngTemplateOutlet]="customTemplateRef[control.name]"></ng-container>
                             </div>
                             <div [ngClass]="{'basis-52': formGroupsInfo[subForm].designType === 'TableLayout'}">
-                                <input [disabled]="control.disabled || false" style="word-break: break-word;" [type]="(control.fieldType == 'textbox') && control.inputType" [name]="control.name" [formControlName]="control.name" class="textfield"
+                                <input
+                                    [disabled]="control.disabled || false" style="word-break: break-word;"
+                                    [type]="(control.fieldType == 'textbox') && control.inputType"
+                                    [name]="control.name"
+                                    [formControlName]="control.name" class="textfield"
+                                    [ngStyle]="((control.fieldType === 'textbox') && control.width !== null) ? {'width': control.width} : {'width': 'inherit'}"
                                     [ngClass]="{
                                         'invalid': form.get(subForm)?.get(control.name)!.invalid && (form.get(subForm)?.get(control.name)!.dirty || form.get(subForm)?.get(control.name)!.touched),}" />
                                 <ng-container
@@ -43,7 +48,7 @@
                             </label>
                         </div>
                         <div *ngSwitchCase="'textArea'" class="flex"
-                        [ngClass]="formGroupsInfo[subForm].designType === 'TableLayout' ? 'flex-row justify-between' : 'flex-col'">
+                        [ngClass]="formGroupsInfo[subForm].designType === 'TableLayout' ? 'flex-row justify-between gap-2' : 'flex-col'">
                             <div class="flex justify-between">
                                 <label [for]="control.name" class="text-md font-medium mb-1 relative"
                                     [ngClass]="control.required ? 'requiredField' : ''">
@@ -70,7 +75,7 @@
                             </div>
                         </div>
                         <div *ngSwitchCase="'dropDown'" class="flex"
-                            [ngClass]="formGroupsInfo[subForm].designType === 'TableLayout' ? 'flex-row justify-between' : 'flex-col'">
+                            [ngClass]="formGroupsInfo[subForm].designType === 'TableLayout' ? 'flex-row justify-between gap-2' : 'flex-col'">
                             <div class="flex justify-between items-center">
                                 <label [for]="control.name" class="text-md font-medium mb-1 relative"
                                     [ngClass]="control.required ? 'requiredField' : ''">
@@ -105,7 +110,7 @@
                             </div>
                         </div>
                         <div *ngSwitchCase="'chipsField'" class="flex"
-                            [ngClass]="formGroupsInfo[subForm].designType === 'TableLayout' ? 'flex-row justify-between' : 'flex-col'">
+                            [ngClass]="formGroupsInfo[subForm].designType === 'TableLayout' ? 'flex-row justify-between gap-2' : 'flex-col'">
                             <div class="flex justify-between items-center">
                                 <label [for]="control.name" class="text-md font-medium mb-1 relative"
                                     [ngClass]="control.required ? 'requiredField' : ''">

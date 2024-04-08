@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { API_CONFIG } from '../../../../../../api.config';
 
 @Injectable({
@@ -34,5 +34,10 @@ export class AdminCoreService {
 
   getQuestion(qid: string) : Observable<any> {
     return this.http.get(`${API_CONFIG.baseUrl}${API_CONFIG.adminEndpoints.GET_QUESTION}/${qid}`);
+  }
+
+  deleteQuestion(qid: string) : Observable<any> {
+    return of(true);
+    // return this.http.delete(`${API_CONFIG.baseUrl}${API_CONFIG.adminEndpoints.GET_QUESTION}/${qid}`);
   }
 }

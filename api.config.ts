@@ -2,6 +2,7 @@ export const API_CONFIG = {
   baseUrl: 'http://localhost:8000/api',
   generalEndpoints: {
     ADMIN_LOGIN:  '/auth/login',
+    LOCK_RESOURCE: '/lockResource'
   },
   adminEndpoints: {
     GRID_ROWDATA: '/admin/table/rowData',

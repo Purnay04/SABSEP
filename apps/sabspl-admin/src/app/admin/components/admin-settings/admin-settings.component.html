@@ -1,0 +1,18 @@
+<page-header [title]="'Settings'"></page-header>
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.4)"
+  name="settings"
+  type="ball-scale-multiple"
+  [fullScreen]="true"
+>
+</ngx-spinner>
+<div class="mx-4 relative bg-white dark:bg-slate-950 rounded-lg shadow p-4 md:p-5 h-[77dvh] md:h-[80dvh]">
+  <form-handler
+    #userInfoSettings
+    class="h-full basis-[50%]"
+    [formWrap]="true"
+    [form]="userInfoSettingsFormMeta"
+    (formSubmitEventHandler)="submitEventHandler($event)"
+    (closeEventEventHandler)="closeQuestionForm($event)">
+  </form-handler>
+</div>

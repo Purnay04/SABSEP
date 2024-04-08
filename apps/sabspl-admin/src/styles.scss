@@ -14,8 +14,10 @@
   --accent: #f39c12;
   --txtColor: #e5e9eb;
   --txtDarkColor: #211827;
-  --bg-color: rgb(255 255 255);
-  --dark-bg-color: rgb(2 6 23);
+  --bg-color: #ffffff;
+  --dark-bg-color: #020617;
+  --page-bg-color: #F1F5F9;
+  --dark-page-bg-color: #1A222C;
 
   --maskbg: rgba(0, 0, 0, 0.4);
 }
@@ -45,7 +47,7 @@ body {
   box-sizing: border-box;
 
   // Page Theme Adjusment
-  @apply bg-[#F1F5F9] dark:bg-[#1A222C];
+  // @apply bg-[--page-bg-color] dark:bg-[--dark-page-bg-color];
 }
 
 a {
@@ -65,7 +67,7 @@ h4 {
 
 .textArea {
   @apply block w-full rounded-md py-1 border-0
-  bg-[#F1F5F9] dark:bg-[#1A222C] text-txtDarkColor dark:text-txtColor
+  bg-[--page-bg-color] dark:bg-[--dark-page-bg-color] text-txtDarkColor dark:text-txtColor
   shadow-sm text-lg ring-1 ring-inset ring-gray-300
   placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary
   sm:leading-6 invalid:ring-1 invalid:ring-inset invalid:ring-gray-800;
@@ -73,7 +75,7 @@ h4 {
 
 .textfield {
   @apply block w-full h-9 rounded-md py-1 border-0
-  bg-[#F1F5F9] dark:bg-[#1A222C] text-txtDarkColor dark:text-txtColor
+  bg-[--page-bg-color] dark:bg-[--dark-page-bg-color] text-txtDarkColor dark:text-txtColor
   shadow-sm text-lg ring-1 ring-inset ring-gray-300
   placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary
   sm:leading-6 invalid:ring-1 invalid:ring-inset invalid:ring-gray-800;
@@ -81,7 +83,7 @@ h4 {
 
 .dropDown {
   @apply block min-w-64 h-9 rounded-md py-1 border-0
-  bg-[#F1F5F9] dark:bg-[#1A222C] text-txtDarkColor dark:text-txtColor
+  bg-[--page-bg-color] dark:bg-[--dark-page-bg-color] text-txtDarkColor dark:text-txtColor
   shadow-sm text-lg ring-1 ring-inset ring-gray-300
   placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary
   sm:leading-6 invalid:ring-1 invalid:ring-inset invalid:ring-gray-800;
@@ -320,6 +322,16 @@ p-dynamicdialog {
 .p-dialog .p-dialog-footer button {
   margin: 0 0.5rem 0 0;
   width: auto;
+}
+.p-dialog.p-confirm-dialog .p-confirm-dialog-icon {
+  font-size: 2rem;
+}
+.p-dialog.p-confirm-dialog .p-confirm-dialog-icon.p-icon {
+  width: 2rem;
+  height: 2rem;
+}
+.p-dialog.p-confirm-dialog .p-confirm-dialog-message {
+  margin-left: 1rem;
 }
 .p-dialog.p-confirm-dialog .p-confirm-dialog-icon {
   font-size: 2rem;
@@ -840,7 +852,7 @@ p-dynamicdialog {
   font-size: inherit;
   color: var(--txtDarkColor);
   @apply block h-9 rounded-md py-1 border-0
-  bg-[#F1F5F9] dark:bg-[#1A222C] text-txtDarkColor dark:text-txtColor
+  bg-[--page-bg-color] dark:bg-[--dark-page-bg-color] text-txtDarkColor dark:text-txtColor
   shadow-sm text-lg ring-1 ring-inset ring-gray-300
   placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary
   sm:leading-6 invalid:ring-1 invalid:ring-inset invalid:ring-gray-800;

@@ -18,7 +18,7 @@ export class AdminPanelComponent {
   userInfo!: UserInfo;
 
   constructor(
-    private router: Router,
+    public router: Router,
     public breadcrumbService: BreadcrumbService,
     private authService: AuthService
   ) {
@@ -72,8 +72,17 @@ export class AdminPanelComponent {
     }
   }
 
+  navigateToSettings() {
+    let currentBreadcrumbItems = this.breadcrumbService.getCurrent();
+    if(currentBreadcrumbItems.size > 1) {
+      this.breadcrumbService.popItem();
+    }
+    this.router.navigate(['admin', 'settings']);
+  }
+
   logout() {
     this.authService.logout();
+    document.documentElement.classList.remove('dark')
     this.router.navigate(['']);
   }
 

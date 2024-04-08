@@ -61,6 +61,7 @@ export interface BaseField {
 export type FieldTextbox = BaseField & {
   fieldType: 'textbox';
   inputType?: string;
+  width?: string;
 };
 
 type IsFieldTextbox<T> = T extends FieldTextbox ? true : false;
