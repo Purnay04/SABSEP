@@ -21,4 +21,5 @@ class MetaData {
     private boolean resizable;
     private String sortBy;
     private String cellRenderer;
+    private String filter;
 }
