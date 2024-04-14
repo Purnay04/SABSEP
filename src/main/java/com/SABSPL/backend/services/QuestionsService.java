@@ -75,11 +75,10 @@ public class QuestionsService {
             Aggregation aggregation = Aggregation.newAggregation(
                     matchOperation,
                     Aggregation.sort(pageable.getSort()),
-                    Aggregation.skip(pageable.getPageSize() * pageable.getPageNumber()),
-                    Aggregation.limit(pageable.getPageSize())
+                    Aggregation.skip(pageable.getPageSize() * pageable.getPageNumber())
             );
             var result = mongoTemplate.aggregate(aggregation,COLLECTION_NAME,Question.class).getMappedResults();
             var questionViewList = result.stream().map(ele->new QuestionView(ele.getId(),ele.getQuestionInShort(),ele.getCategory(),true,true)).collect(Collectors.toList());
-            return new PageImpl<>(questionViewList,pageable,mongoTemplate.count(new Query(),COLLECTION_NAME));
+            return new PageImpl<>(questionViewList,pageable,result.size());
         }
 }
