@@ -1,4 +1,5 @@
 package com.SABSPL.sabsep.services;
+import com.SABSPL.sabsep.models.ExamVariables;
 import com.SABSPL.sabsep.models.FilterRequest;
 import org.jsoup.Jsoup;
 import com.SABSPL.sabsep.dto.QuestionDTO;
@@ -81,4 +82,16 @@ public class QuestionsService {
     var questionViewList = result.stream().map(ele->new QuestionView(ele.getId(),ele.getQuestionInShort(),ele.getCategory(),true,true)).collect(Collectors.toList());
     return new PageImpl<>(questionViewList,pageable,result.size());
   }
+
+  public void deleteQuestionById(String id) throws Exception {
+    Optional<Question> optionalQuestion = questionsRepository.findById(id);
+    if (optionalQuestion.isEmpty())  throw new Exception("Question Not Found");
+    Question question = optionalQuestion.get();
+    ExamVariables examVariables = examVariableService.getAllExamVariables();
+    long countByCategory = questionsRepository.countByCategory(question.getCategory());
+    long categoryCountInExam = examVariables.getCategories().getOrDefault(question.getCategory(),0);
+    if (categoryCountInExam>=countByCategory)    throw new RuntimeException("");
+    questionsRepository.deleteById(id);
+  }
+
 }

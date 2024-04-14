@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -28,4 +29,16 @@ public class QuestionsController {
         if (optionalQuestion.isEmpty()) return ResponseEntity.badRequest().body("");
         return ResponseEntity.ok(optionalQuestion.get());
     }
+
+    @DeleteMapping("/{id}")
+  public ResponseEntity<?> deleteQuestion(@PathVariable String id){
+      try {
+        questionsService.deleteQuestionById(id);
+      } catch (Exception e) {
+        return ResponseEntity.badRequest().body(
+          Map.of("ErrorMsg", e.getMessage()));
+      }
+      return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }

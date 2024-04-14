@@ -11,11 +11,6 @@ import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class CandidateService {
@@ -34,7 +29,6 @@ public class CandidateService {
                         Aggregation.unwind("cd"),
                         Aggregation.project("cd.score","cd.startTime","email","username","id"),
                         Aggregation.sort(pageable.getSort()),
-                        Aggregation.limit(pageable.getPageSize()),
                         Aggregation.skip(pageable.getPageSize()),
                         matchOperation
                 )
