@@ -13,8 +13,8 @@ The SABSEP Test Module is a comprehensive web application designed to facilitate
 - **Certificate Generation:** Upon successful completion of a test, users receive a certificate with a grade, acknowledging their achievement.
 
 ## Technologies Used
-- **Frontend:** HTML, CSS, Typescript (Angular)
+- **Frontend:** HTML, CSS, Typescript (Angular), Tailwind, PrimeNG, Nx workspace
 - **Backend:** Java, Spring Boot
 - **Database:** MongoDB
 - **Authentication:** JSON Web Tokens (JWT)
-- **Other:** RESTful API for communication between frontend and backend, Docker
+- **Other:** RESTful API for communication between frontend and backend, Docker, Ag-Grid
